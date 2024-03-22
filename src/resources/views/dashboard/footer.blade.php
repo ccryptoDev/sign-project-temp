@@ -4,8 +4,7 @@
         </div>
         <!-- page outer -->
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script>
+
     <!-- full background -->
     <script>
         var HOST_URL = "https://preview.keenthemes.com/metronic/theme/html/tools/preview";
@@ -76,7 +75,9 @@
     <script src="/assets/plugins/global/plugins.bundle.js"></script>
     <script src="/assets/plugins/custom/prismjs/prismjs.bundle.js"></script>
     <script src="/assets/js/scripts.bundle.js"></script>
-
+    <!-- <script src="/assets/js/slick.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script>
     <script src="/assets/js/messagesign.js"></script>
     
 </body>

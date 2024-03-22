@@ -1,3 +1,89 @@
+/* slick css */
+.slick {  
+  width: 80%;
+  margin: 0px auto 0px auto;
+}
+
+.slick span {
+  /* display: block; */
+  background: #f4f5f6;
+  color: #fff;
+  font-size: 36px;
+  height: 100px;
+  /* line-height: 100px; */
+  position: relative;
+  text-align: center;
+  border: solid 2px rgb(12, 12, 12);
+  border-radius: 8px;
+  
+  transform: translate(0, 0) scale(.4);
+  transition: all .4s ease;
+  opacity: .5;    
+} 
+
+.slick img {
+  width: 100%;
+  height: 100%;
+}
+
+
+.slick-slide.lt2 span {
+  transform: translate(10%, 0) scale(.6);
+}
+.slick-slide.lt1 span {
+  opacity: .7;
+  transform: translate(5%, 0) scale(.8);
+}
+.slick-slide.gt1 span {
+  opacity: .7;
+  transform: translate(-5%, 0) scale(.8);
+}
+.slick-slide.gt2 span {
+  transform: translate(-10%, 0) scale(.6);
+}
+.slick-slide.slick-center span {
+  z-index: 1;
+  transform: scale(1);
+  opacity: 1;
+  color: #0a0a0a;
+  text-align: center;
+  border: solid 4px rgb(52, 9, 172);
+  border-radius: 8px;
+}
+
+
+.slick-prev,
+.slick-next{
+  position: absolute;
+  top: 50%;
+  appearance: none;
+  margin-top: -10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  /* cursor: pointer; */
+  color: transparent;
+  outline: none;
+  z-index: 100;
+}
+
+.slick .slick-prev {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 15px 15px 15px 0;
+  border-color: transparent #000000 transparent transparent;
+  left: 0;
+}
+.slick .slick-next {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 15px 0 15px 15px;
+  border-color: transparent transparent transparent #000000;
+  right: 0;
+}
+
 .login-header-logo-image {
   width: 40%; 
   margin: 2rem 0;     
@@ -140,4 +226,6 @@
 .custom-header .qrcode-form img {
   width: 70%;
 }
+
+
 

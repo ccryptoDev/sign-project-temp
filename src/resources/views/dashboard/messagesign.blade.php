@@ -1,4 +1,4 @@
-<html>
+<!-- <html>
     <head>
         <base href="../../../../">
         <meta charset="utf-8" />        
@@ -14,7 +14,6 @@
         <link rel="shortcut icon" href="/assets/media/logos/logo-letter-13.png" />
         <meta name="csrf-token" content="{{ csrf_token() }}">
         
-        <!-- <meta https-equiv="X-UA-Compatible" content="ie=edge" /> -->
         <link rel="stylesheet" href="/assets/css/messagesign.css" />
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -87,4 +86,50 @@
         </ul>
         <script src="/assets/js/messagesign.js"></script>           
     </body>
-</html>
+</html> -->
+
+@include('dashboard.header')
+    <!-- Aside Container -->
+    <div class="d-flex flex-column justify-content-between px-8 py-lg-10 px-lg-24">
+        <!-- custom header -->
+        <div class="custom-header">
+            <div class="page-logo">
+                <img  src="/assets/media/logos/logo_new.png" class="login-header-logo-image" alt=""  /> 
+            </div>
+            <div class="text-center italic page-title">
+                <h2>Choose a Message</h2>
+                <p>Search for a message by keyword, then use slider or thumbnails to choose an image, click on middle image in the bluebox to choose</p>
+            </div>
+            <div class="qrcode-form">
+                <a href="#">Click for HELP</a>
+                <img src="/assets/media/mainmenu/qr_code.png" alt="Sign Controller QRcode">
+            </div>
+        </div>
+        <!-- end: custom-header --> 
+    
+        <!-- begin::Aside body -->
+        <div class="d-flex flex-column-fluid flex-column px-16 page-container message-menu">
+            <div class="main-menu">
+                <div class="menu-item"> 
+                    <input name="keyword" value="Speed Limit"></input>
+                </div>
+                <div class="menu-item"> 
+                    <input name="id-name" value="1002-35MPH"></input>
+                </div>
+                <div class="slick">
+                    @foreach ($images as $image)
+                    <div>
+                        <span>
+                            <img src="{{ asset('assets/media/signmessage/' . $image) }}" alt="image" />
+                        </span>
+                    </div>
+                    @endforeach            
+                </div>               
+                
+            </div>
+        </div>
+        
+        <!-- end::Aside body -->    
+    </div>    
+    <!-- end::Aside Container -->
+@include('dashboard.footer')

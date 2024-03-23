@@ -2,10 +2,12 @@
 .slick {  
   width: 80%;
   margin: 0px auto 0px auto;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .slick span {
-  /* display: block; */
+  display: block;
   background: #f4f5f6;
   color: #fff;
   font-size: 36px;
@@ -226,6 +228,71 @@
 .custom-header .qrcode-form img {
   width: 70%;
 }
+.fluid {
+  width: 100%;
+}
+
+.thumbnail-list {
+  list-style: none;
+  padding: 20px 0px 10px 20px;
+  margin: 0px auto 0px auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  max-height: 600px; 
+  overflow-y: auto;
+  width: 50%;
+}
+
+.thumbnail-list li {
+  width: calc(25% - 10px); 
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.thumbnail-list span {    
+  display: block;
+  background: #f4f5f6;
+  color: #fff;
+  font-size: 36px;
+  
+  position: relative;
+  text-align: center;
+  border: solid 2px rgb(12, 12, 12);
+  border-radius: 8px;
+  cursor: pointer;
+  
+  transition: all .4s ease;
+  opacity: .5; 
+  width: 100%;
+  
+}
+
+.thumbnail-list img {
+  width: 100%;
+  height: 100%;
+}
+
+.search-item {
+  width: 100%;
+  height: 40px;
+  /* border: 2px solid #5757c7;   */
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: #fff;
+}
+.search-input {
+  width: 80%;
+  height: 80%;
+}
+.visible-hidden {
+  visibility: hidden;
+}
+.text-center {
+  text-align: center;
+}
+
 
 
 

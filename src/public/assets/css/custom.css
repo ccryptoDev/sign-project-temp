@@ -234,12 +234,13 @@
 
 .thumbnail-list {
   list-style: none;
-  padding: 20px 0px 10px 20px;
-  margin: 0px auto 0px auto;
+  /* padding: 20px 0px 10px; */
+  margin-top: 2rem;
+  margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
-  max-height: 600px; 
+  justify-content: start;
+  max-height: 400px;
   overflow-y: auto;
   width: 50%;
 }

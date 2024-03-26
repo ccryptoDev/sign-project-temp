@@ -38,7 +38,7 @@
         font-size: 18px;
     }
 
-    #createGrid,
+    #createMessage,
     #paintBtn {
         margin-right: 10px;
     }
@@ -177,8 +177,15 @@
                 <div class="card card-custom card-stretch">
                     <div class="card-header">
                         <div class="card-title">
-                            <button class="btn btn-danger mt-0 d-inline" type="button" id="createGrid">Save</button>
+                            <button class="btn btn-danger mt-0 d-inline" type="button" id="clearMessage">New</button>
+                            <button class="btn btn-warning mt-0 d-inline mr-3" type="button">Edit</button>
+                            <select class="form-control selectpicker d-inline mr-3" id="edit-mode" data-style="btn-success">
+                                <option value="0">3-Line Mode</option>
+                                <option value="1">Dot-Type</option>
+                            </select>
+                            <button class="btn btn-danger mt-0 d-inline" type="button" id="createMessage">Save & Exit</button>
                             <button class="btn btn-warning mt-0 d-inline mr-3" type="button">Save & Send</button>
+                            <button class="btn btn-warning mt-0 d-inline mr-3" type="button">Cancel & Exit</button>
                             <div class="gridControl">
                                 <form id="sizePicker" name="gridSize">
                                 </form>
@@ -214,14 +221,14 @@
                         </div>
                     </div>
                     <div class="card-body text-center" style="overflow:scroll">  
-                        <div class="row align-items-center mb-6">
+                        <!-- <div class="row align-items-center mb-6">
                             <div class="col-8">
                                 <div id="kt_nouislider_2" class="nouislider nouislider-handle-danger"></div>
                             </div>
                             <div class="col-4">
                                 <button class="btn btn-info btn-block" type="button" id="changeBright">Change Brightness</button>
                             </div>
-                        </div>
+                        </div> -->
                         <textarea class="form-control d-none" id="dummy" rows="3"></textarea>
                         <textarea class="form-control" id="inputBox" rows="3"></textarea>
                         <div id="ledContainer">
@@ -248,6 +255,7 @@
     var p = 1;
 
     var messages = [];
+    let alignment = 0;
 
     for(let i = 1; i < 31; i++) {
         if(i > total * p) {
@@ -343,6 +351,9 @@
         }
 
         function justifyAlignment() {
+            
+            clearLights(); // Clear Canvas Panel
+
             const emptyLetter = [false, false, false, false, false, false, false];
   
             if (alignment === 0) {
@@ -356,7 +367,6 @@
                     }
 
                     emptyLetters = messages[i].concat(emptyLetters);
-
                     drawMessage(emptyLetters, i);
 
                 }
@@ -371,19 +381,12 @@
                     else 
                         upwordLength = 60 - messages[i].length;
 
-                    var emptyLetters = [], afterEmptyLetters = [];
+                    var emptyLetters = [];
                     for (let j = 0; j < upwordLength; j++) {
                         emptyLetters.push(emptyLetter);
                     }
 
                     emptyLetters = emptyLetters.concat(messages[i]);
-
-                    for (let j = 0; j < 60 - emptyLetters[i].length; j++) {
-                        afterEmptyLetters.push(emptyLetter);
-                    }
-
-                    emptyLetters = emptyLetters.concat(afterEmptyLetters);
-
                     drawMessage(emptyLetters, i);
                 }
                 
@@ -690,8 +693,8 @@
         const gridCanvas = document.getElementById('gridCanvas');
         let gridTileMode = PAINT // controls paint or erase of grid cells (td's)
 
-        // $('#createGrid').on('click', function makeGrid(event) {gridSize
-        $("#createGrid").on("click", function() {
+        // $('#createMessage').on('click', function makeGrid(event) {gridSize
+        $("#createMessage").on("click", function() {
             event.preventDefault();
             Swal.fire({
                 title: "Are you sure?",
@@ -876,8 +879,8 @@
         }
 
 
-        let alignment = 0;
-
+        
+        // Alignment
         $("#alignLeft").on("click", function() {
             event.preventDefault();
             
@@ -912,6 +915,13 @@
             justifyAlignment();
         })
 
+        // Clear Canvas for New button
+        $("#clearMessage").on("click", function () {
+            event.preventDefault();
+
+            $("#inputBox").val('');
+            clearLights();
+        })
 
     });
 </script>

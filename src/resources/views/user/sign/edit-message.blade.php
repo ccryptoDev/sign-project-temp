@@ -191,34 +191,6 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="card-toolbar">
-                            <div class="btn-group text-alignment mr-2" role="group" aria-label="Basic example">
-                                <button class="btn btn-sm btn-icon btn-light text-left bg-dark" 
-                                    data-alignment="left"
-                                    id="alignLeft"
-                                >
-                                    <i class="fas fa-align-left"></i>
-                                </button>
-                                <button class="btn btn-sm btn-icon btn-light text-center"
-                                    data-alignment="center"
-                                    id="alignCenter"
-                                >
-                                    <i class="fas fa-align-center"></i>
-                                </button>
-                                <button class="btn btn-sm btn-icon btn-light text-right" 
-                                    data-alignment="right"
-                                    id="alignRight"
-                                >
-                                    <i class="fas fa-align-right"></i>
-                                </button>
-                            </div>
-                            <a class="btn btn-sm btn-icon btn-light mr-2 undo">
-                                <i class="flaticon2-left-arrow"></i>
-                            </a>
-                            <a class="btn btn-sm btn-icon btn-light mr-2 redo">
-                                <i class="flaticon2-right-arrow"></i>
-                            </a>
-                        </div>
                     </div>
                     <div class="card-body text-center" style="overflow:scroll">  
                         <!-- <div class="row align-items-center mb-6">
@@ -231,6 +203,77 @@
                         </div> -->
                         <textarea class="form-control d-none" id="dummy" rows="3"></textarea>
                         <textarea class="form-control" id="inputBox" rows="3"></textarea>
+
+                        <!-- Alignment -->
+                        <div class="card-toolbar d-flex justify-content-between mt-5">
+                            <div class="btn-group text-alignment mr-2" role="group" aria-label="Basic example">
+                                <button class="btn btn-sm btn-icon btn-light text-left bg-dark" 
+                                    data-alignment="left"
+                                    id="alignLeftFirst"
+                                >
+                                    <i class="fas fa-align-left"></i>
+                                </button>
+                                <button class="btn btn-sm btn-icon btn-light text-center"
+                                    data-alignment="center"
+                                    id="alignCenterFirst"
+                                >
+                                    <i class="fas fa-align-center"></i>
+                                </button>
+                                <button class="btn btn-sm btn-icon btn-light text-right" 
+                                    data-alignment="right"
+                                    id="alignRightFirst"
+                                >
+                                    <i class="fas fa-align-right"></i>
+                                </button>
+                            </div>
+                            <div class="btn-group text-alignment mr-2" role="group" aria-label="Basic example">
+                                <button class="btn btn-sm btn-icon btn-light text-left bg-dark" 
+                                    data-alignment="left"
+                                    id="alignLeftSecond"
+                                >
+                                    <i class="fas fa-align-left"></i>
+                                </button>
+                                <button class="btn btn-sm btn-icon btn-light text-center"
+                                    data-alignment="center"
+                                    id="alignCenterSecond"
+                                >
+                                    <i class="fas fa-align-center"></i>
+                                </button>
+                                <button class="btn btn-sm btn-icon btn-light text-right" 
+                                    data-alignment="right"
+                                    id="alignRightSecond"
+                                >
+                                    <i class="fas fa-align-right"></i>
+                                </button>
+                            </div>
+                            <div class="btn-group text-alignment mr-2" role="group" aria-label="Basic example">
+                                <button class="btn btn-sm btn-icon btn-light text-left bg-dark" 
+                                    data-alignment="left"
+                                    id="alignLeftThird"
+                                >
+                                    <i class="fas fa-align-left"></i>
+                                </button>
+                                <button class="btn btn-sm btn-icon btn-light text-center"
+                                    data-alignment="center"
+                                    id="alignCenterThird"
+                                >
+                                    <i class="fas fa-align-center"></i>
+                                </button>
+                                <button class="btn btn-sm btn-icon btn-light text-right" 
+                                    data-alignment="right"
+                                    id="alignRightThird"
+                                >
+                                    <i class="fas fa-align-right"></i>
+                                </button>
+                            </div>
+                            <!-- <a class="btn btn-sm btn-icon btn-light mr-2 undo">
+                                <i class="flaticon2-left-arrow"></i>
+                            </a>
+                            <a class="btn btn-sm btn-icon btn-light mr-2 redo">
+                                <i class="flaticon2-right-arrow"></i>
+                            </a> -->
+                        </div>
+
                         <div id="ledContainer">
                             <div id='wrapperLed' class="row"></div>
                         </div>
@@ -255,7 +298,7 @@
     var p = 1;
 
     var messages = [];
-    let alignment = 0;
+    let alignments = [0,0,0];
 
     for(let i = 1; i < 31; i++) {
         if(i > total * p) {
@@ -350,45 +393,42 @@
             return flatten;
         }
 
-        function justifyAlignment() {
-            
-            clearLights(); // Clear Canvas Panel
+        function justifyAlignment(layer) {
 
             const emptyLetter = [false, false, false, false, false, false, false];
   
-            if (alignment === 0) {
+            if (alignments[layer] === 0) {
 
-                for (let i = 0; i < messages.length; i++) {
+                var emptyLetters = [], afterEmptyLetters = [];
 
-                    var emptyLetters = [];
-
-                    for (let j = 0; j < 60 - messages[i].length; j++) {
-                        emptyLetters.push(emptyLetter);
-                    }
-
-                    emptyLetters = messages[i].concat(emptyLetters);
-                    drawMessage(emptyLetters, i);
-
+                for (let j = 0; j < 60 - messages[layer].length; j++) {
+                    emptyLetters.push(emptyLetter);
                 }
+
+                emptyLetters = messages[layer].concat(emptyLetters);
+                drawMessage(emptyLetters, layer);
 
             } else {
                 // alignment
                 let upwordLength;
                 
-                for (let i = 0; i < messages.length; i++) {
-                    if (alignment === 1) 
-                        upwordLength = (60 - messages[i].length) / 2;
-                    else 
-                        upwordLength = 60 - messages[i].length;
+                if (alignments[layer] === 1) 
+                    upwordLength = (60 - messages[layer].length) / 2;
+                else 
+                    upwordLength = 60 - messages[layer].length;
 
-                    var emptyLetters = [];
-                    for (let j = 0; j < upwordLength; j++) {
-                        emptyLetters.push(emptyLetter);
-                    }
-
-                    emptyLetters = emptyLetters.concat(messages[i]);
-                    drawMessage(emptyLetters, i);
+                var emptyLetters = [], afterEmptyLetters = [];
+                for (let j = 0; j < upwordLength; j++) {
+                    emptyLetters.push(emptyLetter);
                 }
+
+                emptyLetters = emptyLetters.concat(messages[layer]);
+
+                for (let j = 0; j < 60 - emptyLetters.length; j++) {
+                    afterEmptyLetters.push(emptyLetter);
+                }
+                emptyLetters = emptyLetters.concat(afterEmptyLetters);
+                drawMessage(emptyLetters, layer);
                 
             }
         }
@@ -413,9 +453,9 @@
                     //         }
                     //     }
                     // }
+                    justifyAlignment(i);
                 }
 
-                justifyAlignment();
             }
         });
 
@@ -881,38 +921,110 @@
 
         
         // Alignment
-        $("#alignLeft").on("click", function() {
+
+        // the first layer
+        $("#alignLeftFirst").on("click", function() {
             event.preventDefault();
             
-            document.getElementById("alignLeft").classList.add("bg-dark");
-            document.getElementById("alignCenter").classList.remove("bg-dark");
-            document.getElementById("alignRight").classList.remove("bg-dark");
+            document.getElementById("alignLeftFirst").classList.add("bg-dark");
+            document.getElementById("alignCenterFirst").classList.remove("bg-dark");
+            document.getElementById("alignRightFirst").classList.remove("bg-dark");
 
-            alignment = 0;
+            alignments[0] = 0;
 
-            justifyAlignment();
+            justifyAlignment(0);
         })
 
-        $("#alignCenter").on("click", function() {
+        $("#alignCenterFirst").on("click", function() {
             event.preventDefault();
             
-            document.getElementById("alignLeft").classList.remove("bg-dark");
-            document.getElementById("alignCenter").classList.add("bg-dark");
-            document.getElementById("alignRight").classList.remove("bg-dark");
+            document.getElementById("alignLeftFirst").classList.remove("bg-dark");
+            document.getElementById("alignCenterFirst").classList.add("bg-dark");
+            document.getElementById("alignRightFirst").classList.remove("bg-dark");
 
-            alignment = 1;
-            justifyAlignment();
+            alignments[0] = 1;
+            justifyAlignment(0);
         })
 
-        $("#alignRight").on("click", function() {
+        $("#alignRightFirst").on("click", function() {
             event.preventDefault();
             
-            document.getElementById("alignLeft").classList.remove("bg-dark");
-            document.getElementById("alignCenter").classList.remove("bg-dark");
-            document.getElementById("alignRight").classList.add("bg-dark");
+            document.getElementById("alignLeftFirst").classList.remove("bg-dark");
+            document.getElementById("alignCenterFirst").classList.remove("bg-dark");
+            document.getElementById("alignRightFirst").classList.add("bg-dark");
 
-            alignment = 2;
-            justifyAlignment();
+            alignments[0] = 2;
+            justifyAlignment(0);
+        })
+
+        // the second layer
+        $("#alignLeftSecond").on("click", function() {
+            event.preventDefault();
+            
+            document.getElementById("alignLeftSecond").classList.add("bg-dark");
+            document.getElementById("alignCenterSecond").classList.remove("bg-dark");
+            document.getElementById("alignRightSecond").classList.remove("bg-dark");
+
+            alignments[1] = 0;
+
+            justifyAlignment(1);
+        })
+
+        $("#alignCenterSecond").on("click", function() {
+            event.preventDefault();
+            
+            document.getElementById("alignLeftSecond").classList.remove("bg-dark");
+            document.getElementById("alignCenterSecond").classList.add("bg-dark");
+            document.getElementById("alignRightSecond").classList.remove("bg-dark");
+
+            alignments[1] = 1;
+            justifyAlignment(1);
+        })
+
+        $("#alignRightSecond").on("click", function() {
+            event.preventDefault();
+            
+            document.getElementById("alignLeftSecond").classList.remove("bg-dark");
+            document.getElementById("alignCenterSecond").classList.remove("bg-dark");
+            document.getElementById("alignRightSecond").classList.add("bg-dark");
+
+            alignments[1] = 2;
+            justifyAlignment(1);
+        })
+
+        // the third layer
+        $("#alignLeftThird").on("click", function() {
+            event.preventDefault();
+            
+            document.getElementById("alignLeftThird").classList.add("bg-dark");
+            document.getElementById("alignCenterThird").classList.remove("bg-dark");
+            document.getElementById("alignRightThird").classList.remove("bg-dark");
+
+            alignments[2] = 0;
+
+            justifyAlignment(2);
+        })
+
+        $("#alignCenterThird").on("click", function() {
+            event.preventDefault();
+            
+            document.getElementById("alignLeftThird").classList.remove("bg-dark");
+            document.getElementById("alignCenterThird").classList.add("bg-dark");
+            document.getElementById("alignRightThird").classList.remove("bg-dark");
+
+            alignments[2] = 1;
+            justifyAlignment(2);
+        })
+
+        $("#alignRightThird").on("click", function() {
+            event.preventDefault();
+            
+            document.getElementById("alignLeftThird").classList.remove("bg-dark");
+            document.getElementById("alignCenterThird").classList.remove("bg-dark");
+            document.getElementById("alignRightThird").classList.add("bg-dark");
+
+            alignments[2] = 2;
+            justifyAlignment(2);
         })
 
         // Clear Canvas for New button

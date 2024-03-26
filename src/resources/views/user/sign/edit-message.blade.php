@@ -1,4 +1,4 @@
-@include('dashboard.header')
+@include('user.header_new')
 <style>
     table,
     tr,
@@ -183,7 +183,7 @@
                                 <option value="0">3-Line Mode</option>
                                 <option value="1">Dot-Type</option>
                             </select>
-                            <button class="btn btn-danger mt-0 d-inline" type="button" id="createMessage">Save & Exit</button>
+                            <button class="btn btn-danger mt-0 d-inline mr-3" type="button" id="createMessage">Save & Exit</button>
                             <button class="btn btn-warning mt-0 d-inline mr-3" type="button">Save & Send</button>
                             <button class="btn btn-warning mt-0 d-inline mr-3" type="button">Cancel & Exit</button>
                             <div class="gridControl">
@@ -287,6 +287,7 @@
             </div>
         </div>
     </div>
+
 </div>
 @include('user.footer')
 <script src="/js/slider.js"></script>

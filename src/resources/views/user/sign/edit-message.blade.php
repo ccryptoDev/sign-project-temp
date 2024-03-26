@@ -186,14 +186,22 @@
                         </div>
                         <div class="card-toolbar">
                             <div class="btn-group text-alignment mr-2" role="group" aria-label="Basic example">
-                                <button class="btn btn-sm btn-icon btn-light text-left" data-alignment="left">
+                                <button class="btn btn-sm btn-icon btn-light text-left bg-dark" 
+                                    data-alignment="left"
+                                    id="alignLeft"
+                                >
                                     <i class="fas fa-align-left"></i>
                                 </button>
-                                <button class="btn btn-sm btn-icon btn-light text-center active"
-                                    data-alignment="center">
+                                <button class="btn btn-sm btn-icon btn-light text-center"
+                                    data-alignment="center"
+                                    id="alignCenter"
+                                >
                                     <i class="fas fa-align-center"></i>
                                 </button>
-                                <button class="btn btn-sm btn-icon btn-light text-right" data-alignment="right">
+                                <button class="btn btn-sm btn-icon btn-light text-right" 
+                                    data-alignment="right"
+                                    id="alignRight"
+                                >
                                     <i class="fas fa-align-right"></i>
                                 </button>
                             </div>
@@ -238,6 +246,9 @@
     let total = 10;
     var layers = 3;
     var p = 1;
+
+    var messages = [];
+
     for(let i = 1; i < 31; i++) {
         if(i > total * p) {
             p++;
@@ -327,17 +338,71 @@
         
             var flatten = [];
             flatten = flatten.concat.apply(flatten, theMessage);
+
             return flatten;
         }
+
+        function justifyAlignment() {
+            const emptyLetter = [false, false, false, false, false, false, false];
+  
+            if (alignment === 0) {
+
+                for (let i = 0; i < messages.length; i++) {
+
+                    var emptyLetters = [];
+
+                    for (let j = 0; j < 60 - messages[i].length; j++) {
+                        emptyLetters.push(emptyLetter);
+                    }
+
+                    emptyLetters = messages[i].concat(emptyLetters);
+
+                    drawMessage(emptyLetters, i);
+
+                }
+
+            } else {
+                // alignment
+                let upwordLength;
+                
+                for (let i = 0; i < messages.length; i++) {
+                    if (alignment === 1) 
+                        upwordLength = (60 - messages[i].length) / 2;
+                    else 
+                        upwordLength = 60 - messages[i].length;
+
+                    var emptyLetters = [], afterEmptyLetters = [];
+                    for (let j = 0; j < upwordLength; j++) {
+                        emptyLetters.push(emptyLetter);
+                    }
+
+                    emptyLetters = emptyLetters.concat(messages[i]);
+
+                    for (let j = 0; j < 60 - emptyLetters[i].length; j++) {
+                        afterEmptyLetters.push(emptyLetter);
+                    }
+
+                    emptyLetters = emptyLetters.concat(afterEmptyLetters);
+
+                    drawMessage(emptyLetters, i);
+                }
+                
+            }
+        }
+
         $("#inputBox").on('keyup', function(e){
             clearLights();
             var value = $("#inputBox").val();
             if(value != '' ) {
                 var msg = value.split('\n');
                 var layer = msg.length;
+
+                messages = [];
                 for (let i = 0; i < layer; i++) {
                     myMessage = textToLED(msg[i]);
-                    var newArrayVal = drawMessage(myMessage, i);
+                    
+                    // var newArrayVal = drawMessage(myMessage, i);
+                    messages.push(myMessage);
                     // if (newArrayVal !== undefined) {
                     //     for(var j = 0; j < newArrayVal.length; j++) {
                     //         for(var i = 0; i < 7; i++) {
@@ -346,6 +411,8 @@
                     //     }
                     // }
                 }
+
+                justifyAlignment();
             }
         });
 
@@ -359,9 +426,10 @@
         }
 
         function drawMessage(messageArray, line){
+
             var messageLength = messageArray.length;
             var totalScrollLength = 60 + messageLength;        
-            if(messageLength>0){        
+            if(messageLength > 0){        
                 for (var col = 0; col < messageLength; col++) {
                     for (var row = 0; row < 7; row++) {
                         var offsetCol = 0 + col;
@@ -806,6 +874,44 @@
                 tileMode.innerHTML = ' ' + gridTileMode;
             });
         }
+
+
+        let alignment = 0;
+
+        $("#alignLeft").on("click", function() {
+            event.preventDefault();
+            
+            document.getElementById("alignLeft").classList.add("bg-dark");
+            document.getElementById("alignCenter").classList.remove("bg-dark");
+            document.getElementById("alignRight").classList.remove("bg-dark");
+
+            alignment = 0;
+
+            justifyAlignment();
+        })
+
+        $("#alignCenter").on("click", function() {
+            event.preventDefault();
+            
+            document.getElementById("alignLeft").classList.remove("bg-dark");
+            document.getElementById("alignCenter").classList.add("bg-dark");
+            document.getElementById("alignRight").classList.remove("bg-dark");
+
+            alignment = 1;
+            justifyAlignment();
+        })
+
+        $("#alignRight").on("click", function() {
+            event.preventDefault();
+            
+            document.getElementById("alignLeft").classList.remove("bg-dark");
+            document.getElementById("alignCenter").classList.remove("bg-dark");
+            document.getElementById("alignRight").classList.add("bg-dark");
+
+            alignment = 2;
+            justifyAlignment();
+        })
+
 
     });
 </script>

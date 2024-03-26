@@ -395,6 +395,8 @@
 
         function justifyAlignment(layer) {
 
+            if (!messages[layer]) return;
+
             const emptyLetter = [false, false, false, false, false, false, false];
   
             if (alignments[layer] === 0) {
@@ -436,11 +438,12 @@
         $("#inputBox").on('keyup', function(e){
             clearLights();
             var value = $("#inputBox").val();
+            messages = [];
+            
             if(value != '' ) {
                 var msg = value.split('\n');
                 var layer = msg.length;
 
-                messages = [];
                 for (let i = 0; i < layer; i++) {
                     myMessage = textToLED(msg[i]);
                     
@@ -1033,6 +1036,8 @@
 
             $("#inputBox").val('\n\n');
             clearLights();
+            
+            messages = [];
         })
 
     });

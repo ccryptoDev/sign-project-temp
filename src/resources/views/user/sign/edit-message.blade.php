@@ -290,7 +290,7 @@
 
 </div>
 @include('user.footer')
-<script src="/js/slider.js"></script>
+<!-- <script src="/js/slider.js"></script> -->
 <script src="/js/charToLed.js"></script>
 <script>
     let blank = 2;
@@ -319,61 +319,61 @@
     // drawGrid();
     $(document.fonts).ready(function(){
         // Change Bright ness
-        $("#changeBright").on('click', function() {
-            var slider = document.getElementById('kt_nouislider_2');
-            changeBrightness(slider.noUiSlider.get());
-        })
-        function changeBrightness(bright) {
-            KTApp.blockPage();
-            $.ajax({
-                url : '/change-brightness',
-                type : "POST",
-                data : {
-                    bright: bright,
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success : function(res){
-                    if(res['success'] == true) {
-                        toastr.success('Success');
-                    } else {
-                        toastr.error(res['message']);
-                    }
-                    KTApp.unblockPage();
-                },
-                error: function() {
-                    toastr.error("Change brightness failed");
-                    KTApp.unblockPage();
-                }
-            });
-        }
-        getCurrentBright();
-        function getCurrentBright() {
-            var slider = document.getElementById('kt_nouislider_2');
-            KTApp.block('#kt_nouislider_2', {
-                overlayColor: 'red',
-                opacity: 0.1,
-                state: 'primary'
-            });
-            $.ajax({
-                url : '/get-brightness',
-                type : "POST",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success : function(res){
-                    if(res['success'] == true) {
-                        slider.noUiSlider.set(res['bright']);
-                    }
-                    KTApp.unblock('#kt_nouislider_2');
-                },
-                error: function() {
-                    toastr.error("Get brightness failed");
-                    KTApp.unblock('#kt_nouislider_2');
-                }
-            });
-        }
+        // $("#changeBright").on('click', function() {
+        //     var slider = document.getElementById('kt_nouislider_2');
+        //     changeBrightness(slider.noUiSlider.get());
+        // })
+        // function changeBrightness(bright) {
+        //     KTApp.blockPage();
+        //     $.ajax({
+        //         url : '/change-brightness',
+        //         type : "POST",
+        //         data : {
+        //             bright: bright,
+        //         },
+        //         headers: {
+        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //         },
+        //         success : function(res){
+        //             if(res['success'] == true) {
+        //                 toastr.success('Success');
+        //             } else {
+        //                 toastr.error(res['message']);
+        //             }
+        //             KTApp.unblockPage();
+        //         },
+        //         error: function() {
+        //             toastr.error("Change brightness failed");
+        //             KTApp.unblockPage();
+        //         }
+        //     });
+        // }
+        // getCurrentBright();
+        // function getCurrentBright() {
+        //     var slider = document.getElementById('kt_nouislider_2');
+        //     KTApp.block('#kt_nouislider_2', {
+        //         overlayColor: 'red',
+        //         opacity: 0.1,
+        //         state: 'primary'
+        //     });
+        //     $.ajax({
+        //         url : '/get-brightness',
+        //         type : "POST",
+        //         headers: {
+        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //         },
+        //         success : function(res){
+        //             if(res['success'] == true) {
+        //                 slider.noUiSlider.set(res['bright']);
+        //             }
+        //             KTApp.unblock('#kt_nouislider_2');
+        //         },
+        //         error: function() {
+        //             toastr.error("Get brightness failed");
+        //             KTApp.unblock('#kt_nouislider_2');
+        //         }
+        //     });
+        // }
         // 
         function clearLights(){
             var lightsOn = $('.on');

@@ -179,21 +179,17 @@
                         <div class="card-title">
                             <button class="btn btn-danger mt-0 d-inline mr-3" type="button" id="clearMessage">New</button>
                             <button class="btn btn-warning mt-0 d-inline mr-3" type="button">Edit</button>
+                            <select class="form-control selectpicker d-inline mr-3" id="edit-mode" data-style="btn-success">
+                                <option value="0">3-Line Mode</option>
+                                <option value="1">Dot-Type</option>
+                            </select>
                             <button class="btn btn-danger mt-0 d-inline" type="button" id="createMessage">Save & Exit</button>
                             <button class="btn btn-warning mt-0 d-inline mr-3" type="button">Save & Send</button>
                             <button class="btn btn-warning mt-0 d-inline mr-3" type="button">Cancel & Exit</button>
                             <div class="gridControl">
                                 <form id="sizePicker" name="gridSize">
-                                    </form>
-                                </div>
+                                </form>
                             </div>
-                        </div>
-                        <div class="card-title">
-                            <select class="form-control selectpicker d-inline mr-3" id="edit-mode" data-style="btn-success">
-                                <option value="0">3-Line Mode</option>
-                                <option value="1">Dot-Type</option>
-                            </select>
-                            <button class="btn btn-warning mt-0 d-inline mr-3" type="button">Cancel & Exit</button>
                         </div>
                     </div>
                     <div class="card-body text-center" style="overflow:scroll">  

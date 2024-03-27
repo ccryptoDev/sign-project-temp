@@ -297,6 +297,7 @@
 <!-- <script src="/js/slider.js"></script> -->
 <script src="/js/charToLed.js"></script>
 <script src="/js/canvastobmp.min.js"></script>
+<script src="/js/html2canvas.min.js"></script>
 <script>
     let blank = 2;
     let total = 10;
@@ -762,10 +763,18 @@
                 },
             }).then(function(result) {
                 if (result.value) {
-                    console.log($("#canvas").first()[0]);
-                    CanvasToBMP.toDataURL($("#canvas").first()[0], function (url) {
-                        console.log(url);
-                    })
+                    
+                    if ($("#edit-mode").val() == 0) {
+                        CanvasToBMP.toDataURL($("#canvas").first()[0], function (url) {
+                            console.log(url);
+                        })
+                    } else {
+                        html2canvas($("#pixelCanvas").first()[0]).then(function(canvas) {
+                            CanvasToBMP.toDataURL(canvas, function (url) {
+                                console.log(url);
+                            })
+                        });
+                    }
                 }
             });
         })

@@ -181,7 +181,7 @@
                             <button class="btn btn-warning mt-0 d-inline mr-3" type="button">Edit</button>
                             
                             <button class="btn btn-danger mt-0 d-inline mr-3" type="button" id="createMessage">Save & Exit</button>
-                            <button class="btn btn-warning mt-0 d-inline mr-3" type="button">Save & Send</button>
+                            <button class="btn btn-warning mt-0 d-inline mr-3" type="button" id="createAndSend>Save & Send</button>
                             <button class="btn btn-warning mt-0 d-inline mr-3" type="button">Cancel & Exit</button>
                         </div>
                         <div class="card-title">
@@ -296,6 +296,7 @@
 @include('user.footer')
 <!-- <script src="/js/slider.js"></script> -->
 <script src="/js/charToLed.js"></script>
+<script src="/js/canvastobmp.min.js"></script>
 <script>
     let blank = 2;
     let total = 10;
@@ -755,14 +756,16 @@
                 text: 'You won"t be able to revert this!',
                 icon: "question",
                 showCancelButton: true,
-                confirmButtonText: "Yes, create new one!",
+                confirmButtonText: "Yes, create message!",
                 customClass: {
                     confirmButton: "btn-danger",
                 },
             }).then(function(result) {
                 if (result.value) {
-                    changeMode();
-                    makeGrid();
+                    console.log($("#canvas").first()[0]);
+                    CanvasToBMP.toDataURL($("#canvas").first()[0], function (url) {
+                        console.log(url);
+                    })
                 }
             });
         })

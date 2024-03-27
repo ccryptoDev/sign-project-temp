@@ -42,7 +42,7 @@ Route::get('/reset-password/{token}', function ($token) {
 })->name('password.reset');
 Route::post('reset-password', [AuthController::class, 'reset_password'])->name('reset-password');
 
-Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Webserver Control
 Route::post('change-brightness', [SocketController::class, 'change_brightness']);

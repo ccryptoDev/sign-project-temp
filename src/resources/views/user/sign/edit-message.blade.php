@@ -151,6 +151,10 @@
         background: #ddd;
     }
 
+    .swal2-label {
+        color: black !important;
+    }
+
     /* make adjustments for smaller devices */
 </style>
 
@@ -845,14 +849,8 @@
                                 }
                             });
                         } else { //admin
-                            const inputOptions = role === 1 ? {
-                                "0": "User",
-                                "1": "Company",
-                            } : {
-                                "0": "User",
-                                "1": "Company",
-                                "2": "INEX"
-                            };
+
+                            const inputOptions = role === 1 ? { "0": "User", "1": "Company"} : { "0": "User", "1": "Company", "2": "INEX" };
 
                             const { value: option } = await Swal.fire({
                                 title: "Select your preferred option",

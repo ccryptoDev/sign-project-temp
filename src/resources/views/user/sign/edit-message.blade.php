@@ -749,34 +749,133 @@
         const gridCanvas = document.getElementById('gridCanvas');
         let gridTileMode = PAINT // controls paint or erase of grid cells (td's)
 
+        var saveMessageCall = function (range, base64Image, imageName, imageType) {
+            $.ajax({
+                url : '/save-message',
+                type : "POST",
+                data : {
+                    range: range,
+                    base64Image: base64Image,
+                    imageName: imageName,
+                    imageType: imageType
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success : function(res){
+                    if (res == 'success'){
+                        console.log('success');
+                    }
+                    else{
+                        
+                    }
+                },
+                error : function(err){
+                    
+                    toastr.error("Please refresh your browser");
+                }
+            })
+        }
+
+        var saveMessage = function (range) {
+    
+            // Get base64data of BMP
+            if ($("#edit-mode").val() == 0) {
+                CanvasToBMP.toDataURL($("#canvas").first()[0], function (url) {
+                    
+                    // generate the name of image
+                    var value = $("#inputBox").val();
+                    var imageName = 'empty', imageType = 'bmp'; // [userID]_[imageName]_[timestamp] will be sent to server
+                    
+                    if(value != '' ) imageName = value.split('\n').join('_');
+
+                    saveMessageCall(range, url, imageName, imageType);
+                })
+            } else {
+                html2canvas($("#pixelCanvas").first()[0]).then(function(canvas) {
+                    CanvasToBMP.toDataURL(canvas, function (url) {
+                        var imageName = 'symbol', imageType = 'bmp'; // [userID]_[imageName]_[timestamp] will be sent to server
+
+                        // TODO: exceed error
+                        // console.log(url);
+                        // saveMessageCall(range, url, imageName, imageType);
+                    })
+                });
+            }
+            
+        }
+
         // $('#createMessage').on('click', function makeGrid(event) {gridSize
         $("#createMessage").on("click", function() {
             event.preventDefault();
-            Swal.fire({
-                title: "Are you sure?",
-                text: 'You won"t be able to revert this!',
-                icon: "question",
-                showCancelButton: true,
-                confirmButtonText: "Yes, create message!",
-                customClass: {
-                    confirmButton: "btn-danger",
-                },
-            }).then(function(result) {
-                if (result.value) {
-                    
-                    if ($("#edit-mode").val() == 0) {
-                        CanvasToBMP.toDataURL($("#canvas").first()[0], function (url) {
-                            console.log(url);
-                        })
-                    } else {
-                        html2canvas($("#pixelCanvas").first()[0]).then(function(canvas) {
-                            CanvasToBMP.toDataURL(canvas, function (url) {
-                                console.log(url);
-                            })
-                        });
+            
+            // get user role
+            $.ajax({
+                url : '/get-user-role',
+                type : "GET",
+                success : async function(res){
+                    console.log(res);
+                    if (res["success"]){
+                        var role = res["role"];
+
+                        // open Fire modal
+                        if (role === 0) { //user
+                            Swal.fire({
+                                title: "Are you sure?",
+                                text: 'You won"t be able to revert this!',
+                                icon: "question",
+                                showCancelButton: true,
+                                confirmButtonText: "Yes, create message!",
+                                customClass: {
+                                    confirmButton: "btn-danger",
+                                },
+                            }).then(function(result) {
+                                // Only one option = user
+                                if (result.value) {
+                                    saveMessage([1, 999])
+                                }
+                            });
+                        } else { //admin
+                            const inputOptions = role === 1 ? {
+                                "0": "User",
+                                "1": "Company",
+                            } : {
+                                "0": "User",
+                                "1": "Company",
+                                "2": "INEX"
+                            };
+
+                            const { value: option } = await Swal.fire({
+                                title: "Select your preferred option",
+                                input: "radio",
+                                inputOptions,
+                                inputValidator: (value) => {
+                                    if (!value) {
+                                        return "You need to choose at least one."
+                                    }
+                                }
+                            });
+
+                            if (option) {
+                                
+                                var range = [1, 999];
+                                if (option === "1") range = [1000, 1999];
+                                if (option === '2') range = [2000, 2999];
+
+                                saveMessage(range);
+                            }
+                        }
+
                     }
+                    else{
+                        toastr.error("Please try to login");
+                    }
+                },
+                error : function(err){
+                    toastr.error("Please refresh your browser");
                 }
-            });
+            })
+
         })
 
         // $('#createGrid').on('click', function makeGrid(event) {gridSize

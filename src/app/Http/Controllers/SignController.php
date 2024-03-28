@@ -55,10 +55,8 @@ class SignController extends Controller
     // }
 
     public function save_message(Request $request) {
-
-        $imageName = strval(Auth::user()->id)."_".$request->imageName."_".time();
         
-        Storage::disk("public")->putFileAs("assets/media/signmessage", $request->base64Image, $imageName.".".$request->imageType);
+        Storage::disk("public")->putFileAs("assets/media/signmessage", $request->base64Image, $request->imageName.".".$request->imageType);
         
         // get max value for imageNo
         $existedNo = Image::where("no", ">=", $request["range"][0])->where("no", "<=", $request["range"][1])->max("no");
@@ -74,8 +72,9 @@ class SignController extends Controller
 
         $image->no = $no;
         $image->type = $request->imageType;
-        $image->name = $imageName.".".$request->imageType;
+        $image->name = $request->imageName.".".$request->imageType;
         $image->path = "public/assets/media/signmessage";
+        $image->keywords = $request->imageKeywords;
 
         $image->save(); 
         

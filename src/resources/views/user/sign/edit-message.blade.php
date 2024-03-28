@@ -749,7 +749,7 @@
         const gridCanvas = document.getElementById('gridCanvas');
         let gridTileMode = PAINT // controls paint or erase of grid cells (td's)
 
-        var saveMessageCall = function (range, base64Image, imageName, imageType) {
+        var saveMessageCall = function (range, base64Image, imageName, imageType, imageKeywords) {
             $.ajax({
                 url : '/save-message',
                 type : "POST",
@@ -757,48 +757,57 @@
                     range: range,
                     base64Image: base64Image,
                     imageName: imageName,
-                    imageType: imageType
+                    imageType: imageType,
+                    imageKeywords: imageKeywords
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success : function(res){
-                    if (res == 'success'){
-                        console.log('success');
+                    if (res.success){
+                        toastr.success('Saved the message successfully!');
                     }
                     else{
-                        
+                        toastr.error("Something went wrong, please try again.");    
                     }
                 },
                 error : function(err){
-                    
                     toastr.error("Please refresh your browser");
                 }
             })
         }
 
-        var saveMessage = function (range) {
+        var saveMessage = function (range) {           
     
             // Get base64data of BMP
-            if ($("#edit-mode").val() == 0) {
-                CanvasToBMP.toDataURL($("#canvas").first()[0], function (url) {
-                    
-                    // generate the name of image
-                    var value = $("#inputBox").val();
-                    var imageName = 'empty', imageType = 'bmp'; // [userID]_[imageName]_[timestamp] will be sent to server
-                    
-                    if(value != '' ) imageName = value.split('\n').join('_');
 
-                    saveMessageCall(range, url, imageName, imageType);
+            if ($("#edit-mode").val() == 0) {
+                html2canvas($("#wrapperLed").first()[0]).then(function(canvas) {
+                    CanvasToBMP.toDataURL(canvas, function (url) {
+                        
+                        // generate the name of image
+                        var value = $("#inputBox").val();
+                        var imageName = 'empty', imageType = 'bmp', imageKeywords = ''; // [userID]_[imageName]_[timestamp] will be sent to server
+                        
+                        if(value != '' ) {
+                            imageName = value.split('\n').join('_');
+                            imageKeywords = value.split('\n').join(', ');
+                        }
+    
+                        saveMessageCall(range, url, imageName, imageType, imageKeywords);
+    
+                        clearMessage();
+                    })
                 })
             } else {
                 html2canvas($("#pixelCanvas").first()[0]).then(function(canvas) {
                     CanvasToBMP.toDataURL(canvas, function (url) {
-                        var imageName = 'symbol', imageType = 'bmp'; // [userID]_[imageName]_[timestamp] will be sent to server
+                        var imageName = 'symbol', imageType = 'bmp', imageKeywords = 'symbol'; // [userID]_[imageName]_[timestamp] will be sent to server
 
                         // TODO: exceed error
                         // console.log(url);
-                        // saveMessageCall(range, url, imageName, imageType);
+                        // saveMessageCall(range, url, imageName, imageType, imageKeywords);
+                        // clearMessage();
                     })
                 });
             }
@@ -1172,24 +1181,30 @@
         })
 
         // Clear Canvas for New button
-        $("#clearMessage").on("click", function () {
-            event.preventDefault();
 
+        var clearMessage = function () {
+            
             $("#inputBox").val('\n\n');
             clearLights();
             
             messages = [];
-
+    
             var trs = $("#pixelCanvas").first().children().children();
             
             for (let i = 0; i < trs.length; i++) {
-
+    
                 var tds = trs[i].children
                 
                 for (let j = 0; j < tds.length; j++) {
                     tds[j].style.backgroundColor = 'white';
                 }
             }
+        }
+
+        $("#clearMessage").on("click", function () {
+            event.preventDefault();
+
+            clearMessage();
         })
 
     });

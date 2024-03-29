@@ -45,7 +45,7 @@
 </div>
 </div>
 <div id="slickPanel">
-    <div class="slick">
+    <!-- <div class="slick">
         @foreach ($images as $image)
         <div>
             <span>
@@ -54,27 +54,35 @@
         </div>
         @endforeach
         
-    </div>
+    </div> -->
 </div>
 <div class="fluid bg-white">
     <!-- page outer -->
+    <div class="d-flex flex-column-fluid flex-column px-16 page-container message-menu">
+        <div class="main-menu">
+            <div class="search-item">
+                <label class="visible-hidden">Search: </label>
+                <input class="search-input text-center" name="id-name" id="secondSearch" ></input>
+            </div>
+        </div>
+    </div>
     <div class="d-flex overflow-hidden">
         <div class="d-flex flex-column justify-content-betfween px-8 py-lg-10 px-lg-24">
             <div class="d-flex flex-column-fluid flex-column px-16 page-container message-menu">
-                <div class="main-menu">
+                <!-- <div class="main-menu">
                     <div class="search-item">
                         <label class="visible-hidden">Search: </label>
                         <input class="search-input text-center" name="id-name" id="secondSearch" ></input>
                     </div>
-                </div>
+                </div> -->
                 <ul class="thumbnail-list" id="thumbnail-list">
-                    @foreach ($images as $image)
+                    <!-- @foreach ($images as $image)
                     <li>
                         <span>
                             <img src="{{ asset('assets/media/signmessage/' . $image) }}" alt="image" />
                         </span>
                     </li>
-                    @endforeach
+                    @endforeach -->
                 </ul>
             </div>
         </div>
@@ -119,8 +127,8 @@
     })
 
     var secondSearch  = function () {
-        var value1 = $("#firstSearch").val().toLowerCase(), value2 = $("#secondSearch").val().toLowerCase();
-        var secondSelectedImages = images.filter(image => image.toLowerCase().includes(value1) && image.toLowerCase().includes(value2));
+        var value1 = $("#firstSearch").val().toLowerCase().trim(), value2 = $("#secondSearch").val().toLowerCase().trim();
+        var secondSelectedImages = images.filter(image => image.toLowerCase().trim().includes(value1) && image.toLowerCase().trim().includes(value2));
 
         $("#thumbnail-list").html('');
         for (var i = 0; i < secondSelectedImages.length; i++) {
@@ -135,8 +143,8 @@
 
     $("#firstSearch").on('keyup', function(e){
         
-        var value = $("#firstSearch").val().toLowerCase();
-        var firstSelectedImages = images.filter(image => image.toLowerCase().includes(value));
+        var value = $("#firstSearch").val().toLowerCase().trim();
+        var firstSelectedImages = images.filter(image => image.toLowerCase().trim().includes(value));
 
         // console.log(firstSelectedImages);
 

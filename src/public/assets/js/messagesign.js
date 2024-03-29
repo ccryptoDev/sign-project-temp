@@ -42,6 +42,7 @@ $('.slick')
   }
 
   console.log('beforeChange', current, ':', lt2, lt1, next, gt1, gt2);
+  currentIndex = next;
 });
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -51,6 +52,7 @@ document.addEventListener("DOMContentLoaded", function() {
     thumbnail.addEventListener('click', () => {
       console.log('Clicked thumbnail index:', index);
       $('.slick').slick('slickGoTo', index);      
+      currentIndex = index;
     });
   });
 });

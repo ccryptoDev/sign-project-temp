@@ -27,7 +27,7 @@
                 <div class="main-menu">
                     <div class="search-item">
                         <label class="italic">Search: </label>
-                        <input class="search-input text-center" name="keyword" value="Speed Limit"></input>
+                        <input class="search-input text-center" name="keyword" id="firstSearch" ></input>
                     </div>
                     <div class="search-item">
                         <label class="visible-hidden italic">Search: </label>
@@ -44,15 +44,17 @@
     </div>
 </div>
 </div>
-<div class="slick">
-    @foreach ($images as $image)
-    <div>
-        <span>
-            <img src="{{ asset('assets/media/signmessage/' . $image) }}" alt="image" />
-        </span>
+<div id="slickPanel">
+    <div class="slick">
+        @foreach ($images as $image)
+        <div>
+            <span>
+                <img src="{{ asset('assets/media/signmessage/' . $image) }}" alt="image" />
+            </span>
+        </div>
+        @endforeach
+        
     </div>
-    @endforeach
-    
 </div>
 <div class="fluid bg-white">
     <!-- page outer -->
@@ -62,10 +64,10 @@
                 <div class="main-menu">
                     <div class="search-item">
                         <label class="visible-hidden">Search: </label>
-                        <input class="search-input text-center" name="id-name" value="1002-35MPH"></input>
+                        <input class="search-input text-center" name="id-name" id="secondSearch" ></input>
                     </div>
                 </div>
-                <ul class="thumbnail-list">
+                <ul class="thumbnail-list" id="thumbnail-list">
                     @foreach ($images as $image)
                     <li>
                         <span>
@@ -115,6 +117,49 @@
             // toastr.error("Please select image.");
         }
     })
+
+    var secondSearch  = function () {
+        var value1 = $("#firstSearch").val().toLowerCase(), value2 = $("#secondSearch").val().toLowerCase();
+        var secondSelectedImages = images.filter(image => image.toLowerCase().includes(value1) && image.toLowerCase().includes(value2));
+
+        $("#thumbnail-list").html('');
+        for (var i = 0; i < secondSelectedImages.length; i++) {
+
+            var component = `<li><span><img src="{{ asset('assets/media/signmessage/${secondSelectedImages[i]}' ) }}" alt="image" /></span></li>`;
+            $("#thumbnail-list").append(component);
+
+        }
+
+        addClassFunction();
+    }
+
+    $("#firstSearch").on('keyup', function(e){
+        
+        var value = $("#firstSearch").val().toLowerCase();
+        var firstSelectedImages = images.filter(image => image.toLowerCase().includes(value));
+
+        // console.log(firstSelectedImages);
+
+        $("#slickPanel").html('<div class="slick" id="slick"></div>');
+        for (var i = 0; i < firstSelectedImages.length; i++) {
+
+            var component = `<div><span><img src="{{ asset('assets/media/signmessage/${firstSelectedImages[i]}') }}" alt="image" /></span></div>`;
+            $("#slick").append(component);
+
+        }
+
+        slickFunction();
+
+        secondSearch();
+    });
+
+    $("#secondSearch").on('keyup', function(e){
+
+        secondSearch();        
+
+    });
+
+
 </script>
 </body>
 

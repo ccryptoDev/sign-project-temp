@@ -241,7 +241,7 @@
   justify-content: start;
   max-height: 400px;
   overflow-y: auto;
-  width: 50%;
+  /* width: 50%; */
   margin-top: 2rem;
 }
 

@@ -1,6 +1,11 @@
 @include('dashboard.header')
 <!-- Aside Container -->
 <!-- full background -->
+<style>
+    .form-control {
+        border: 1px solid #007bff;
+    }
+</style>
 <div class="fluid bg-white">
     <!-- page outer -->
     <div class="d-flex overflow-hidden">
@@ -26,16 +31,12 @@
             <div class="d-flex flex-column-fluid flex-column px-16 page-container message-menu">
                 <div class="main-menu">
                     <div class="search-item">
-                        <label class="italic">Search: </label>
-                        <input class="search-input text-center" name="keyword" id="firstSearch" ></input>
+                        <label class="italic">Keywords: </label>
+                        <input class="form-control search-input text-center" name="id-name" value="1002-35MPH"></input>
                     </div>
                     <div class="search-item">
-                        <label class="visible-hidden italic">Search: </label>
-                        <input class="search-input text-center" name="id-name" value="1002-35MPH"></input>
-                    </div>
-
-                    <div>
-                        <button class="btn btn-danger mt-0 d-inline mr-3" type="button" id="send">Send</button>
+                        <label class="italic">Search 1: </label>
+                        <input class="form-control search-input text-center" name="keyword" id="firstSearch" ></input>
                     </div>
                 </div>
             </div>
@@ -61,8 +62,8 @@
     <div class="d-flex flex-column-fluid flex-column px-16 page-container message-menu">
         <div class="main-menu">
             <div class="search-item">
-                <label class="visible-hidden">Search: </label>
-                <input class="search-input text-center" name="id-name" id="secondSearch" ></input>
+                <label class="">Search 2: </label>
+                <input class="form-control search-input text-center" name="id-name" id="secondSearch" ></input>
             </div>
         </div>
     </div>
@@ -83,7 +84,14 @@
                         </span>
                     </li>
                     @endforeach -->
-                </ul>
+                </ul>               
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-column-fluid flex-column px-16 page-container message-menu">
+        <div class="main-menu">
+            <div class="search-item">            
+                <button class="btn btn-danger mt-0 d-inline mr-3 mt-10" type="button" id="send">Send</button>
             </div>
         </div>
     </div>

@@ -2,9 +2,12 @@
 <!-- Aside Container -->
 <!-- full background -->
 <style>
-    /* .form-control {
-        border: 1px solid #007bff;
-    } */
+    .form-control {
+        font-size: 16px;
+    }
+    label {
+        font-size: 14px;
+    }
 </style>
 <div class="fluid bg-white">
     <!-- page outer -->
@@ -31,11 +34,11 @@
             <div class="d-flex flex-column-fluid flex-column px-16 page-container message-menu">
                 <div class="main-menu">
                     <div class="search-item">
-                        <label class="italic">Keywords: </label>
-                        <input class="form-control search-input text-center" name="id-name" value="1002-35MPH"></input>
+                        <label class="italic">Information: </label>
+                        <input class="form-control search-input text-center" id="information" value="" disabled></input>
                     </div>
                     <div class="search-item">
-                        <label class="italic">Search 1: </label>
+                        <label class="">Search 1: </label>
                         <input class="form-control search-input text-center" name="keyword" id="firstSearch" ></input>
                     </div>
                 </div>
@@ -45,28 +48,22 @@
     </div>
 </div>
 </div>
-<div id="slickPanel">
-    <!-- <div class="slick">
-        @foreach ($images as $image)
-        <div>
-            <span>
-                <img src="{{ asset('assets/media/signmessage/' . $image) }}" alt="image" />
-            </span>
-        </div>
-        @endforeach
-        
-    </div> -->
-</div>
+<div id="slickPanel"></div>
 <div class="fluid bg-white">
     <!-- page outer -->
-    <div class="d-flex flex-column-fluid flex-column px-16 page-container message-menu">
-        <div class="main-menu">
-            <div class="search-item">
-                <label class="">Search 2: </label>
-                <input class="form-control search-input text-center" name="id-name" id="secondSearch" ></input>
+    <div class="d-flex flex-column justify-content-between px-8 py-10 px-lg-24">
+        <div class="px-16">
+            <div class="main-menu">
+                <div class="search-item">
+                    <label class="">Search 2: </label>
+                    <input class="form-control search-input text-center" name="id-name" id="secondSearch" ></input>
+                </div>
             </div>
         </div>
     </div>
+
+            
+        
     <div class="d-flex overflow-hidden">
         <div class="d-flex flex-column justify-content-betfween px-8 py-lg-10 px-lg-24">
             <div class="d-flex flex-column-fluid flex-column px-16 page-container message-menu">
@@ -100,9 +97,13 @@
 <script src="/assets/js/messagesign.js"></script>
 <script src="/assets/js/redirect.js"></script>
 <script>
-    var currentIndex = 0;
-    var images = {!! json_encode($images) !!};
     
+    var images = {!! json_encode($images) !!};
+    images = images.map((image, index) => ({ id: index, name: image }) );
+    
+    var currentIndex = 0;
+    var secondSelectedImages = [];
+
     $("#send").on("click", function () {
         event.preventDefault();
 
@@ -136,30 +137,33 @@
 
     var secondSearch  = function () {
         var value1 = $("#firstSearch").val().toLowerCase().trim(), value2 = $("#secondSearch").val().toLowerCase().trim();
-        var secondSelectedImages = images.filter(image => image.toLowerCase().trim().includes(value1) && image.toLowerCase().trim().includes(value2));
+        secondSelectedImages = images.filter(image => image.name.toLowerCase().trim().includes(value1) && image.name.toLowerCase().trim().includes(value2));
 
         $("#thumbnail-list").html('');
         for (var i = 0; i < secondSelectedImages.length; i++) {
 
-            var component = `<li><span><img src="{{ asset('assets/media/signmessage/${secondSelectedImages[i]}' ) }}" alt="image" /></span></li>`;
+            var component = `<li><span><img src="{{ asset('assets/media/signmessage/${ secondSelectedImages[i].name }' ) }}" alt="image" /></span></li>`;
             $("#thumbnail-list").append(component);
 
         }
 
         addClassFunction();
+
+        var name = secondSelectedImages[currentIndex].name.split(".bmp")[0].split("_").join(" ");
+        $("#information").val(name);
     }
 
     $("#firstSearch").on('keyup', function(e){
         
         var value = $("#firstSearch").val().toLowerCase().trim();
-        var firstSelectedImages = images.filter(image => image.toLowerCase().trim().includes(value));
+        var firstSelectedImages = images.filter(image => image.name.toLowerCase().trim().includes(value));
 
         // console.log(firstSelectedImages);
 
         $("#slickPanel").html('<div class="slick" id="slick"></div>');
         for (var i = 0; i < firstSelectedImages.length; i++) {
 
-            var component = `<div><span><img src="{{ asset('assets/media/signmessage/${firstSelectedImages[i]}') }}" alt="image" /></span></div>`;
+            var component = `<div><span><img src="{{ asset('assets/media/signmessage/${firstSelectedImages[i].name}') }}" alt="image" /></span></div>`;
             $("#slick").append(component);
 
         }

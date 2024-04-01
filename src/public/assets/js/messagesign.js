@@ -42,8 +42,11 @@ const slickFunction = function () {
       $(`.slick-slide[data-slick-index="${current - 3}"]`).addClass('lt2');
     }
 
-    console.log('beforeChange', current, ':', lt2, lt1, next, gt1, gt2);
     currentIndex = next;
+
+    var name = secondSelectedImages[currentIndex].name.split(".bmp")[0].split("_").join(" ");
+    $("#information").val(name);
+
   });
 }
 
@@ -52,9 +55,14 @@ const addClassFunction = function () {
   
   thumbnails.forEach((thumbnail, index) => {
     thumbnail.addEventListener('click', () => {
-      console.log('Clicked thumbnail index:', index);
+      // console.log('Clicked thumbnail index:', index);
       $('.slick').slick('slickGoTo', index);      
+
       currentIndex = index;
+
+      var name = secondSelectedImages[currentIndex].name.split(".bmp")[0].split("_").join(" ");
+      $("#information").val(name);
+
     });
   });
 }

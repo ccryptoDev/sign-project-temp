@@ -3,7 +3,7 @@
 <!-- full background -->
 <style>
     .form-control {
-        font-size: 16px;
+        font-size: 14px;
     }
     label {
         font-size: 14px;
@@ -12,7 +12,7 @@
 <div class="fluid bg-white">
     <!-- page outer -->
     <div class="d-flex overflow-hidden">
-        <div class="d-flex flex-column justify-content-betfween px-8 py-10 px-lg-24">
+        <div class="d-flex flex-column justify-content-betfween px-8 pt-10 pb-5 px-lg-24">
             <!-- custom header -->
             <div class="custom-header">
                 <div class="page-logo">
@@ -34,12 +34,23 @@
             <div class="d-flex flex-column-fluid flex-column px-16 page-container message-menu">
                 <div class="main-menu">
                     <div class="search-item">
-                        <label class="italic">Information: </label>
-                        <input class="form-control search-input text-center" id="information" value="" disabled></input>
+                        <!-- <label class="italic">Information: </label> -->
+                        <input class="form-control search-input text-center"
+                            id="information"
+                            value=""
+                            placeholder="The information of selected sign will be displayed here" 
+                            disabled
+                        >
+                        </input>
                     </div>
                     <div class="search-item">
-                        <label class="">Search 1: </label>
-                        <input class="form-control search-input text-center" name="keyword" id="firstSearch" ></input>
+                        <!-- <label class="">Search 1: </label> -->
+                        <input class="form-control search-input" 
+                            name="keyword" 
+                            id="firstSearch" 
+                            placeholder="Please type first keyword"
+                        >
+                        </input>
                     </div>
                 </div>
             </div>
@@ -48,15 +59,20 @@
     </div>
 </div>
 </div>
-<div id="slickPanel"></div>
+<div id="slickPanel" class="slick-panel"></div>
 <div class="fluid bg-white">
     <!-- page outer -->
-    <div class="d-flex flex-column justify-content-between px-8 py-10 px-lg-24">
+    <div class="d-flex flex-column justify-content-between px-8 pt-10 pb-0 px-lg-24">
         <div class="px-16">
             <div class="main-menu">
                 <div class="search-item">
-                    <label class="">Search 2: </label>
-                    <input class="form-control search-input text-center" name="id-name" id="secondSearch" ></input>
+                    <!-- <label class="">Search 2: </label> -->
+                    <input class="form-control search-input"
+                        name="id-name"
+                        id="secondSearch" 
+                        placeholder="Please type second keyword"
+                    >
+                    </input>
                 </div>
             </div>
         </div>
@@ -64,9 +80,9 @@
 
             
         
-    <div class="d-flex overflow-hidden">
+    <!-- <div class="d-flex overflow-hidden"> -->
         <div class="d-flex flex-column justify-content-betfween px-8 py-lg-10 px-lg-24">
-            <div class="d-flex flex-column-fluid flex-column px-16 page-container message-menu">
+            <div class="d-flex flex-column-fluid flex-column px-12 page-container message-menu">
                 <!-- <div class="main-menu">
                     <div class="search-item">
                         <label class="visible-hidden">Search: </label>
@@ -87,12 +103,12 @@
     </div>
     <div class="d-flex flex-column-fluid flex-column px-16 page-container message-menu">
         <div class="main-menu">
-            <div class="search-item">            
-                <button class="btn btn-danger mt-0 d-inline mr-3 mt-10" type="button" id="send">Send</button>
+            <div class="">            
+                <button class="btn btn-danger d-inline my-10" type="button" id="send">Send</button>
             </div>
         </div>
     </div>
-</div>
+<!-- </div> -->
 
 <script src="/assets/js/messagesign.js"></script>
 <script src="/assets/js/redirect.js"></script>
@@ -101,18 +117,18 @@
     var images = {!! json_encode($images) !!};
     images = images.map((image, index) => ({ id: index, name: image }) );
     
-    var currentIndex = 0;
-    var secondSelectedImages = [];
+    var firstIndex = 0, secondIndex = 0;
+    var firstSelectedImages = [], secondSelectedImages = [];
 
     $("#send").on("click", function () {
         event.preventDefault();
 
-        if (images[currentIndex]) {
+        if (firstSelectedImages[firstIndex] && firstSelectedImages[firstIndex].id && images[firstSelectedImages[firstIndex].id]) {
             $.ajax({
                 url : '/send-image-socket',
                 type : "POST",
                 data : {
-                    imageName: images[currentIndex],
+                    imageName: images[firstSelectedImages[firstIndex].id],
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -148,15 +164,12 @@
         }
 
         addClassFunction();
-
-        var name = secondSelectedImages[currentIndex].name.split(".bmp")[0].split("_").join(" ");
-        $("#information").val(name);
     }
 
     $("#firstSearch").on('keyup', function(e){
         
         var value = $("#firstSearch").val().toLowerCase().trim();
-        var firstSelectedImages = images.filter(image => image.name.toLowerCase().trim().includes(value));
+        firstSelectedImages = images.filter(image => image.name.toLowerCase().trim().includes(value));
 
         // console.log(firstSelectedImages);
 
@@ -168,15 +181,32 @@
 
         }
 
-        slickFunction();
+        // initialization
+        firstIndex = 0;
+        if (firstSelectedImages.length > 0) {
+            var name = firstSelectedImages[firstIndex].name;
+            $("#information").val(name);
+        } else {
+            $("#information").val("");
+        }
 
+        slickFunction();
         secondSearch();
     });
 
     $("#secondSearch").on('keyup', function(e){
 
+        
         secondSearch();        
-
+        
+        secondIndex = 0;
+        if (secondSelectedImages.length > 0) {
+            var name = secondSelectedImages[secondIndex].name;
+            // .split(".bmp")[0].split("_").join(" ");
+            $("#information").val(name);
+        } else {
+            $("#information").val("");
+        }
     });
 
 

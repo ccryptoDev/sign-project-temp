@@ -7,9 +7,35 @@ const slickFunction = function () {
       $('.slick-slide[data-slick-index="2"]').addClass('gt2');
   })
   .slick({
+    
     centerMode: true,
     centerPadding: 0,
-    slidesToShow: 5
+    // slidesToShow: 3,
+    slidesToShow: 5,
+    slidesToScroll: 5,
+    responsive: [
+      {
+        breakpoint: 1440,
+        settings: {
+          slidesToShow: 5,
+          slidesToScroll: 5,
+        }
+      },
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3
+        }
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }
+    ]
   }).on('beforeChange', (event, slick, current, next) => {
     $('.slick-slide.gt2').removeClass('gt2');
     $('.slick-slide.gt1').removeClass('gt1');
@@ -42,10 +68,16 @@ const slickFunction = function () {
       $(`.slick-slide[data-slick-index="${current - 3}"]`).addClass('lt2');
     }
 
-    currentIndex = next;
+    firstIndex = next;
 
-    var name = secondSelectedImages[currentIndex].name.split(".bmp")[0].split("_").join(" ");
-    $("#information").val(name);
+    if (firstSelectedImages.length > 0) {
+
+      var name = firstSelectedImages[firstIndex].name;
+      $("#information").val(name);
+
+    } else {
+        $("#information").val("");
+    }
 
   });
 }
@@ -55,13 +87,28 @@ const addClassFunction = function () {
   
   thumbnails.forEach((thumbnail, index) => {
     thumbnail.addEventListener('click', () => {
-      // console.log('Clicked thumbnail index:', index);
-      $('.slick').slick('slickGoTo', index);      
+      // console.log('Clicked thumbnail index:', index); index is secondIndex
+      const id = secondSelectedImages[index].id;
+      for (let i = 0; i < firstSelectedImages.length; i++) {
+        if (firstSelectedImages[i].id === id) {
+          
+          firstIndex = i;
+          $('.slick').slick('slickGoTo', i);
 
-      currentIndex = index;
+          break;
 
-      var name = secondSelectedImages[currentIndex].name.split(".bmp")[0].split("_").join(" ");
-      $("#information").val(name);
+        }
+      }
+     
+      secondIndex = index;
+
+      if (secondSelectedImages.length > 0) {
+          var name = secondSelectedImages[secondIndex].name;
+          // .split(".bmp")[0].split("_").join(" ");
+          $("#information").val(name);
+      } else {
+          $("#information").val("");
+      }
 
     });
   });

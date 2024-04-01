@@ -2,14 +2,14 @@
 <!-- Aside Container -->
 <!-- full background -->
 <style>
-    .form-control {
+    /* .form-control {
         border: 1px solid #007bff;
-    }
+    } */
 </style>
 <div class="fluid bg-white">
     <!-- page outer -->
     <div class="d-flex overflow-hidden">
-        <div class="d-flex flex-column justify-content-betfween px-8 py-lg-10 px-lg-24">
+        <div class="d-flex flex-column justify-content-betfween px-8 py-10 px-lg-24">
             <!-- custom header -->
             <div class="custom-header">
                 <div class="page-logo">

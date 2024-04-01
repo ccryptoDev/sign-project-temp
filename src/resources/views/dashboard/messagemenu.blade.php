@@ -1,6 +1,6 @@
 @include('dashboard.header')
     <!-- Aside Container -->
-    <div class="d-flex flex-column justify-content-between px-8 py-lg-10 px-lg-24">
+    <div class="d-flex flex-column justify-content-between px-8 py-10 px-lg-24">
 
         <!-- custom header  -->
         <div class="custom-header">
@@ -19,7 +19,7 @@
         <!-- end: custom-header -->
 
         <!--begin::Aside body-->
-        <div class="d-flex flex-column-fluid flex-column px-16 page-container message-menu">
+        <div class="d-flex flex-column-fluid flex-column px-4 px-md-16 page-container message-menu">
             <div class="main-menu">
                 <div class="menu-item"> 
                     <a href="{{route('send-to-sign')}}">Send a Message to the Sign</a>

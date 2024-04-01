@@ -158,7 +158,7 @@
     /* make adjustments for smaller devices */
 </style>
 
-<div class="d-flex flex-column justify-content-between px-8 py-lg-10 px-lg-24">
+<div class="d-flex flex-column justify-content-between px-8 py-10 px-lg-24">
     <!-- custom header  -->
     <div class="custom-header">
         <div class="page-logo">

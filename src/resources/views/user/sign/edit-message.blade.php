@@ -321,12 +321,12 @@
         
         for(j = 0; j < canvasWidth; j++) {
             var line_0 = document.createElement('div');
-            line_0.className = (rowNum - 1) + "_" + j + " light off";
+            line_0.className = (rowNum) + "_" + j + " light off";
             col.append(line_0);
         }
     }
     
-    const addBlankRow = function (length, ) {
+    const addBlankRow = function (length, previousRowNum) {
 
         for (let i = 0; i < length; i ++) {
             var col = $('<div class="col-md-12 d-flex justify-content-center blank"/>').appendTo('#wrapperLed');
@@ -341,13 +341,13 @@
         }
     }
 
-    addBlankRow(3);
-    addBlackRow(10, 0);
-    addBlankRow(2);
-    addBlackRow(10, 10);
-    addBlankRow(2);
-    addBlackRow(10, 20);
-    addBlankRow(3);
+    addBlankRow(3, 0);
+    addBlackRow(10, 3);
+    addBlankRow(2, 13);
+    addBlackRow(10, 15);
+    addBlankRow(2, 25);
+    addBlackRow(10, 27);
+    addBlankRow(3, 37);
 
     // drawGrid();
     $(document.fonts).ready(function(){
@@ -503,10 +503,13 @@
             }
         }
 
-        function drawMessage(messageArray, line){
+        function drawMessage(messageArray, layer){
 
             console.log(messageArray);
-            console.log(line);
+            console.log(layer);
+
+            var offsetRow = layer === 0 ? 3 : layer === 1 ? 5 : 7;
+            offsetRow ++;
 
             var messageLength = messageArray.length;
             var totalScrollLength = canvasWidth + messageLength;
@@ -516,7 +519,7 @@
                     for (var row = 0; row < 10; row++) {
                         var offsetCol = 0 + col;
                         if (offsetCol < canvasWidth || offsetCol >= 0) {
-                            setLight(line * 10 + row, offsetCol, messageArray[col][row]);
+                            setLight(offsetRow + layer * 10 + row, offsetCol, messageArray[col][row]);
                         }
                     }
                 }
@@ -529,7 +532,6 @@
         var undo_lists = [];
         var redo_lists = [];
         var undo_flag = false;
-        var alignmentList = ['center', 'center', 'center'];
         // const canvas_bg = document.getElementById('canvas_bg');
         // const ctx_bg = canvas_bg.getContext("2d");
         // const bWidth = $('.card-body').width() * 0.8;
@@ -560,15 +562,19 @@
             // lineHeight = ctx.measureText('M').width;
             // ctx.textBaseline = "middle";
             // ctx.fontKerning = "none";
+
+            console.log('drawtext value: ', value);
             if(value) {
                 var newArray = value.split("\n");
                 newArray.map((item, index) => {
-                    const alignment = alignmentList[index];
+
+                    const alignment = alignments[index];
                     ctx.textAlign = alignment;
                     ctx.color = "black";
-                    if(alignment == 'left') {
+
+                    if(alignment == 0) {
                         ctx.fillText(item, 10, 130 * (index + 1));
-                    } else if(alignment == 'center') {
+                    } else if(alignment == 1) {
                         ctx.fillText(item, x, 130 * (index + 1));
                     } else {
                         ctx.fillText(item, canvas.width - 10, 130 * (index + 1));
@@ -582,6 +588,7 @@
                 }
             }
         }
+        
         function handleClick(e) {
             // if(!isDown) {
             //     return;

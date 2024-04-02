@@ -126,6 +126,8 @@
 .font-size-13pt {
   font-size: 13pt;
 } 
+
+/* QRCODE FORM */
 .qrcode-form {
   width: 100%;
   display: flex;
@@ -139,6 +141,8 @@
 .qrcode-form .description {
   font-style: italic;
 }
+
+
 .description p {
   margin: 0;
   font-size: 14px;
@@ -318,6 +322,34 @@
   text-align: center;
 }
 
+@media (max-width: 576px) {
+  .qrcode-form {
+    display: block;
+    text-align: center;
+    margin: 1rem 0;
+  }
+  .qrcode-form img {
+    width: 70px;
+    margin-bottom: 5px;
+  }
 
+  .qrcode-form .description a, p {
+    font-size: 12px;
+  }
 
+  .main-menu {
+    gap: 1rem;
+  }
 
+  .menu-item {
+    height: 40px;
+  }
+
+  .menu-item a {
+    font-size: 16px;
+  }
+
+  .custom-item .sign-status {
+    padding: 4px;
+  }
+}

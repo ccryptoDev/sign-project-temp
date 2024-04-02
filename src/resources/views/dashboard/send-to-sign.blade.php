@@ -13,21 +13,27 @@
     <!-- page outer -->
     <div class="d-flex overflow-hidden">
         <div class="d-flex flex-column justify-content-betfween px-8 pt-10 pb-5 px-lg-24">
-            <!-- custom header -->
-            <div class="custom-header">
+            <!-- custom header  -->
+            <div class="custom-header px-4 px-md-16">
                 <div class="page-logo">
-                    <img src="/assets/media/logos/logo_new.png" class="login-header-logo-image" alt="" />
+                    <img  src="/assets/media/logos/logo_new.png" class="login-header-logo-image" alt=""  /> 
                 </div>
-                <div class="text-center italic page-title">
-                    <h2>Choose a Message</h2>
-                    <p>Search for a message by keyword, then use slider or thumbnails to choose an image, click on
-                        middle image in the bluebox to choose</p>
+                <div class="d-none d-sm-block text-center italic page-title">
+                    <h2>Work with a Message</h2>
+                    <p>This menu allows the user to retrieve or edit existing messages, make new ones or send to the sign</p>
                 </div>
                 <div class="qrcode-form">
                     <a href="#">Click for HELP</a>
                     <img src="/assets/media/mainmenu/qr_code.png" alt="Sign Controller QRcode">
                 </div>
             </div>
+
+            <div class="px-4">
+                <div class="d-block d-sm-none text-center italic page-title">
+                    <h2>Work with a Message</h2>
+                    <p>This menu allows the user to retrieve or edit existing messages, make new ones or send to the sign</p>
+                </div>
+            </div>  
             <!-- end: custom-header -->
 
             <!-- begin::Aside body -->

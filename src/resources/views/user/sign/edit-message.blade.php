@@ -219,7 +219,7 @@
                             </div>
                         </div> -->
                         <textarea class="form-control d-none" id="dummy" rows="3"></textarea>
-                        <textarea class="form-control" id="inputBox" rows="3"></textarea>
+                        <textarea class="form-control" id="inputBox" rows="3" placeholder="Please enter text"></textarea>
 
                         <!-- Alignment -->
                         <div class="card-toolbar d-flex justify-content-between mt-5">
@@ -312,28 +312,42 @@
 <script src="/js/canvastobmp.min.js"></script>
 <script src="/js/html2canvas.min.js"></script>
 <script>
-    let blank = 2;
-    let total = 10;
-    var p = 1;
+    const canvasWidth = 56;
 
     var messages = [];
     let alignments = [0,0,0];
-
-    for(let i = 1; i < 31; i++) {
-        if(i > total * p) {
-            p++;
-        }
-        if(i < total * p - blank) {
-            var $col = $('<div class="col-md-12 d-flex"/>').appendTo('#wrapperLed');
-        } else {
-            var $col = $('<div class="col-md-12 d-flex blank"/>').appendTo('#wrapperLed');
-        }
-        for(j = 0; j < 60; j++) {
+    
+    const lightOff = function (rowNum, col) {
+        
+        for(j = 0; j < canvasWidth; j++) {
             var line_0 = document.createElement('div');
-            line_0.className = (i - 1) + "_" + j + " light off";
-            $col.append(line_0);
+            line_0.className = (rowNum - 1) + "_" + j + " light off";
+            col.append(line_0);
         }
     }
+    
+    const addBlankRow = function (length, ) {
+
+        for (let i = 0; i < length; i ++) {
+            var col = $('<div class="col-md-12 d-flex justify-content-center blank"/>').appendTo('#wrapperLed');
+            lightOff(previousRowNum + i, col);
+        }
+    }
+    
+    const addBlackRow = function (length, previousRowNum) {
+        for (let i = 0; i < length; i ++) {
+            var col = $('<div class="col-md-12 d-flex justify-content-center"/>').appendTo('#wrapperLed');
+            lightOff(previousRowNum + i, col);
+        }
+    }
+
+    addBlankRow(3);
+    addBlackRow(10, 0);
+    addBlankRow(2);
+    addBlackRow(10, 10);
+    addBlankRow(2);
+    addBlackRow(10, 20);
+    addBlankRow(3);
 
     // drawGrid();
     $(document.fonts).ready(function(){
@@ -404,7 +418,7 @@
         
         function textToLED(theWord){
             var theMessage = [];
-            for(var i=0;i<theWord.length;i++){
+            for(var i = 0; i < theWord.length; i++){
                 theMessage.push(charToLED(theWord.charAt(i)));
                 theMessage.push(charToLED());
             }
@@ -419,13 +433,15 @@
 
             if (!messages[layer]) return;
 
-            const emptyLetter = [false, false, false, false, false, false, false];
+            const emptyLetter = [false, false, false, false, false, false, false, false, false, false];
   
             if (alignments[layer] === 0) {
 
                 var emptyLetters = [], afterEmptyLetters = [];
 
-                for (let j = 0; j < 60 - messages[layer].length; j++) {
+                emptyLetters.push(emptyLetter);
+
+                for (let j = 0; j < canvasWidth - messages[layer].length; j++) {
                     emptyLetters.push(emptyLetter);
                 }
 
@@ -437,9 +453,9 @@
                 let upwordLength;
                 
                 if (alignments[layer] === 1) 
-                    upwordLength = (60 - messages[layer].length) / 2;
+                    upwordLength = (canvasWidth - messages[layer].length) / 2;
                 else 
-                    upwordLength = 60 - messages[layer].length;
+                    upwordLength = canvasWidth - messages[layer].length - 1;
 
                 var emptyLetters = [], afterEmptyLetters = [];
                 for (let j = 0; j < upwordLength; j++) {
@@ -448,7 +464,7 @@
 
                 emptyLetters = emptyLetters.concat(messages[layer]);
 
-                for (let j = 0; j < 60 - emptyLetters.length; j++) {
+                for (let j = 0; j < canvasWidth - emptyLetters.length; j++) {
                     afterEmptyLetters.push(emptyLetter);
                 }
                 emptyLetters = emptyLetters.concat(afterEmptyLetters);
@@ -467,18 +483,12 @@
                 var layer = msg.length;
 
                 for (let i = 0; i < layer; i++) {
+                    console.log('layer ', i);
+
                     myMessage = textToLED(msg[i]);
-                    
-                    // var newArrayVal = drawMessage(myMessage, i);
                     messages.push(myMessage);
-                    // if (newArrayVal !== undefined) {
-                    //     for(var j = 0; j < newArrayVal.length; j++) {
-                    //         for(var i = 0; i < 7; i++) {
-                    //             setLight(i, j, newArrayVal[i][j])
-                    //         }
-                    //     }
-                    // }
                     justifyAlignment(i);
+
                 }
 
             }
@@ -495,15 +505,19 @@
 
         function drawMessage(messageArray, line){
 
+            console.log(messageArray);
+            console.log(line);
+
             var messageLength = messageArray.length;
-            var totalScrollLength = 60 + messageLength;        
-            if(messageLength > 0){        
+            var totalScrollLength = canvasWidth + messageLength;
+
+            if(messageLength > 0) {
                 for (var col = 0; col < messageLength; col++) {
-                    for (var row = 0; row < 7; row++) {
+                    for (var row = 0; row < 10; row++) {
                         var offsetCol = 0 + col;
-                        if (offsetCol < 60 || offsetCol >= 0) {
+                        if (offsetCol < canvasWidth || offsetCol >= 0) {
                             setLight(line * 10 + row, offsetCol, messageArray[col][row]);
-                        }                
+                        }
                     }
                 }
             }

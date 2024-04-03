@@ -130,11 +130,12 @@
         event.preventDefault();
 
         if (firstSelectedImages[firstIndex] && firstSelectedImages[firstIndex].id && images[firstSelectedImages[firstIndex].id]) {
+
             $.ajax({
                 url : '/send-image-socket',
                 type : "POST",
                 data : {
-                    imageName: images[firstSelectedImages[firstIndex].id],
+                    imageName: images[firstSelectedImages[firstIndex].id].name,
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

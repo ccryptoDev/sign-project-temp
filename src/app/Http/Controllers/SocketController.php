@@ -684,6 +684,9 @@ class SocketController extends Controller {
         
         
         $data = $data1 . dechex($eccValue);
+        $data = lzo_compress($data, LZO1X_999);
+        echo $data;
+
 
         
         

@@ -1,14 +1,15 @@
 /* slick css */
 .slick-panel {
+  width: 80%;
   /* background-color: black; */
 }
 
 .slick {  
-  width: 80%;
-  margin: 0px auto 0px auto;
+  width: 100%;
+  margin: 0px auto;
   padding-top: 20px;
   padding-bottom: 20px;
-  background-color: black;
+  /* background-color: black; */
 }
 
 .slick span {
@@ -59,6 +60,8 @@
   opacity: 1;
   color: #0a0a0a;
   text-align: center;
+  border: 5px solid blue;
+  padding: 2px;
 }
 
 
@@ -66,41 +69,36 @@
 .slick-next{
   position: absolute;
   top: 50%;
-  appearance: none;
-  margin-top: -10px;
   padding: 0;
-  border: 0;
-  background: none;
-  /* cursor: pointer; */
   color: transparent;
-  outline: none;
   z-index: 100;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: 1px solid black;
+  transform: translateY(-50%);
 }
-
 .slick-prev {
-  left: 10px !important;
-}
-
-.slick-next {
-  right: 10px !important;
-}
-
-.slick .slick-prev {
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 15px 15px 15px 0;
-  border-color: transparent white transparent transparent;
-  /* rgb(52, 9, 172) */
   left: 0;
 }
-.slick .slick-next {
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 15px 0 15px 15px;
-  border-color: transparent transparent transparent white;
+.slick-next {
   right: 0;
+}
+.slick .slick-prev::before,
+.slick .slick-next::before {
+  color: black;
+  font-size: 30px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.slick .slick-prev::before {
+  content: '<';
+}
+.slick .slick-next::before {
+  content: '>';
 }
 
 .login-header-logo-image {
@@ -258,6 +256,47 @@
   width: 100%;
 }
 
+/* Send a sign */
+.slider-panel {
+  display: flex;
+  align-items: center;
+}
+.slider-panel .send-button {
+  width: 20%;
+}
+.send-button button {
+  background: #5c5cdc;
+  color: #fff;
+  font-size: 18px;
+  width: 70%;
+}
+.send-button button span {
+  display: block
+}
+.search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 2rem 0;
+}
+.search-item {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: #fff;
+  gap: 15px;
+}
+.search-item label {
+  width: 30%;
+  margin: 0;
+  text-align: right;
+  color: #1942c2;
+}
+.search-item .search-input {
+  width: 70%;
+  height: 50px;
+}
 .thumbnail-list {
   list-style: none;
   padding-left: 0;
@@ -270,7 +309,6 @@
   overflow-y: auto;
   width: 100%;
   margin-top: 2rem;
-  background-color: black;
 }
 
 .thumbnail-list li {
@@ -279,47 +317,36 @@
   border: 2px solid white;
 }
 
+.thumbnail-list li.active {
+  border: 5px solid blue;
+  padding: 5px;
+}
+
 .thumbnail-list span {    
   display: block;
-  background: #f4f5f6;
-  color: #fff;
-  font-size: 36px;
-  
-  position: relative;
-  text-align: center;
   border: solid 2px rgb(12, 12, 12);
-  border-radius: 8px;
   cursor: pointer;
-  
   transition: all .4s ease;
-  /* opacity: .5;  */
-  width: 100%;
-  
 }
 
 .thumbnail-list img {
   width: 100%;
-  height: 100%;
 }
 
-.search-item {
-  width: 100%;
-  height: 40px;
-  /* border: 2px solid #5757c7;   */
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  background: #fff;
-}
-.search-input {
-  width: 80%;
-  height: 80%;
-}
 .visible-hidden {
   visibility: hidden;
 }
 .text-center {
   text-align: center;
+}
+
+@media (max-width: 800px) {
+  .form-control {
+    font-size: 18px;
+  }
+  label {
+    font-size: 18px;
+  }
 }
 
 @media (max-width: 576px) {

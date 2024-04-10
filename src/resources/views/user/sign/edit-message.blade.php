@@ -169,7 +169,7 @@
             <p>This menu allows the user to retrieve or edit existing messages, make new ones or send to the sign</p>
         </div>
         <div class="qrcode-form">
-            <a href="#">Click for HELP</a>
+            <!-- <a href="#">Click for HELP</a> -->
             <img src="/assets/media/mainmenu/qr_code.png" alt="Sign Controller QRcode">
         </div>
     </div>
@@ -536,6 +536,7 @@
         var undo_lists = [];
         var redo_lists = [];
         var undo_flag = false;
+        var alignmentList = ['center', 'center', 'center'];
         // const canvas_bg = document.getElementById('canvas_bg');
         // const ctx_bg = canvas_bg.getContext("2d");
         // const bWidth = $('.card-body').width() * 0.8;
@@ -572,13 +573,13 @@
                 var newArray = value.split("\n");
                 newArray.map((item, index) => {
 
-                    const alignment = alignments[index];
+                    const alignment = alignmentList[index];
                     ctx.textAlign = alignment;
                     ctx.color = "black";
 
-                    if(alignment == 0) {
+                    if(alignment == 'left') {
                         ctx.fillText(item, 10, 130 * (index + 1));
-                    } else if(alignment == 1) {
+                    } else if(alignment == 'center') {
                         ctx.fillText(item, x, 130 * (index + 1));
                     } else {
                         ctx.fillText(item, canvas.width - 10, 130 * (index + 1));

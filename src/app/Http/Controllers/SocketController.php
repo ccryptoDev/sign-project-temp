@@ -124,11 +124,111 @@ class SocketController extends Controller {
         $response['result'] = bin2hex($reply);
         return $response;
     }
+
     public function TomTest (Request $request) {
-        echo '123';
-        return 'Testing';
+        // Update linux by:
+        //   cd /home/linuxadmin/sign-controller
+        //   git pull origin main
+        //
+        
+        echo '2024-04-11 update'."<br>\n";
+       
+        $data = 'holy mackerel mackerel mackerel';
+//        $compressedData = exec("echo '$data' | /usr/bin/lzop -c | tommyj.lzo");
+       
+        echo '==============================' ."<br>\n";
+        echo '  Compression test            ' ."<br>\n";
+        echo '==============================' ."<br>\n";
+        
+        $data = "Data,2°Use!" ;
+        $compressed   =  $this->lzocompress($data) ;
+
+        $decompressed = $this->lzodecompress($compressed) ;
+      
+      // Show utput the lzocompress() and lzodecompress() 
+
+        echo "Original Data:<br>\n";
+        echo $data . "<br>\n<br>\n";
+        echo "(" . bin2hex($data) . ")<br>\n<br>\n";
+
+        echo "Compressed Data (hex):<br>\n";
+        echo "(" . bin2hex($compressed) . ")<br>\n<br>\n";
+
+        echo "Decompressed Data:<br>\n";
+        echo $decompressed . "<br>\n";
+        echo "(" . bin2hex($decompressed) . ")<br>\n";
+        echo '==============================' ."<br>\n";
+        
+        return 'Tested';
+    }
+
+    public function lzocompress($DataToCompress)  {
+        $NewTempFile = $this->UniqueFileName() ;
+        $tempdatafile= "lzopcompress_" . $NewTempFile . ".tmp" ;
+        $tempcompressedfile= "lzopcompress_" . $NewTempFile . ".tmp.lzo" ; 
+             
+        // Note:  tom.xxx files for debugging are in the HOST operating system
+        //        in the path /home/inexadmin/sign-controller/src/public
+        //        after a reboot of host OS, need to run 'docker-compose up -d --build app'
+         
+     // Make a file with the DATA to compress:
+
+       file_put_contents($tempdatafile,$DataToCompress) ;
+               
+     // use the Command line lzop, to open the file, compress, write to another file:
+ 
+        shell_exec("lzop -1f $tempdatafile ");
+        
+        $compressedData = "" ;
+        $compressedData = file_get_contents($tempcompressedfile ) ;
+
+        // Clean up/delete the temp files used to pass data to/from LZOP's command line. . .
+        unlink($tempdatafile);
+        unlink($tempcompressedfile);
+
+      exitit: 
+        return $compressedData  ;
+    }
+      
+    public function lzodecompress($DataToDecompress) {
+        $NewTempFile = $this->UniqueFileName() ; 
+        $tempfiletodecompress = "lzopdecompress_" . $NewTempFile . ".tmp.lzo" ;
+        $tempdecompressedfile = "lzopdecompress_" . $NewTempFile . ".tmp" ;
+
+            
+      // Make a file with the DATA to compress:
+      
+        file_put_contents($tempfiletodecompress,$DataToDecompress) ;
+      
+      // use the Command line lzop, to open the file, compress, write to another file:
+        shell_exec(" lzop -1f -d $tempfiletodecompress");
+        
+      // Read back in the compressed data:
+      
+        $Decompressed = "" ;
+        $Decompressed =  file_get_contents($tempdecompressedfile) ;
+      
+      // Clean up/delete the temp files used to pass data to/from LZOP's command line. . .
+        unlink($tempfiletodecompress);
+        unlink($tempdecompressedfile);
+      
+        return $Decompressed ;
+      
+      }
+      
+    
+    public function UniqueFileName() {
+        $s = strtoupper(md5(uniqid(rand(),true)));
+        $guidText =
+            substr($s,0,8) . '-' .
+            substr($s,8,4) . '-' .
+            substr($s,12,4). '-' .
+            substr($s,16,4). '-' .
+            substr($s,20);
+        return $guidText;
     }
     
+
     public function get_brightness(Request $request) {
         // IP address and port
         $ip = $this->ip;

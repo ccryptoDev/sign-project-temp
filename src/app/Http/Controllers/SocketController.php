@@ -896,7 +896,8 @@ class SocketController extends Controller {
 
     public function send_image_test(Request $request) {
         $imageData = $this->convertBitmapToHex();
-        return $imageData;
+        $res = $this->pack1LZO(103, 56, 40, 1, $imageData);
+        return $res;
     }
 
 
@@ -906,9 +907,7 @@ class SocketController extends Controller {
 
         $output = '';
         for($i=0; $i < strlen($contents); $i++) {
-            
             $output .= str_pad(dechex(ord($contents[$i])), 2, '0', STR_PAD_LEFT);
-
         }
 
         $length = str_pad(dechex(strlen($contents)), 4, '0', STR_PAD_LEFT);
@@ -920,7 +919,6 @@ class SocketController extends Controller {
             $length . 
             $output;
 
-        
         // Calculate the Exclusive of all bytes in $Data1 and 7Fh
         // Calculate XOR checksum of each byte with 0x7F
 
@@ -954,9 +952,6 @@ class SocketController extends Controller {
         $data = lzo_compress($data, LZO1X_999);
         echo $data;
 
-
-        
-        
         // Create a new variable $data by concatenating $data1 and $eccValue
         // $data = $data1 . chr($eccValue);
         // echo $eccValue;
@@ -989,5 +984,82 @@ class SocketController extends Controller {
         return $response;
     } 
 
-   
+    private function pack1LZO($function, $screenW, $screenH, $pNb, $str)
+    {
+        // Construct the packet
+        $writeBuffer = [
+            0x59, 
+            0x48, 
+            0x01, 
+            0x01,
+            intval($function / 100), 
+            $function % 100,
+            0x00, // Placeholder for length (to be calculated later)
+            0x00,
+            intval($pNb / 256),
+            $pNb % 256,
+            intval($screenW / 256),
+            $screenW % 256,
+            intval($screenH / 256),
+            $screenH % 256,
+        ];
+
+        // Append data
+        foreach ($str as $byte) {
+            $writeBuffer[] = $byte;
+        }
+
+        // Calculate CRC (XOR checksum)
+        $eccValue = 0x7F;
+        foreach ($writeBuffer as $byte) {
+            $eccValue ^= $byte;
+        }
+
+        // Append CRC to the packet
+        $writeBuffer[] = $eccValue;
+
+        // Set length in the packet
+        $length = count($writeBuffer) - 6; // Length excluding header (4 bytes) and length bytes (2 bytes)
+        $writeBuffer[6] = intval($length / 256);
+        $writeBuffer[7] = $length % 256;
+
+        // Convert to binary string
+        $packet = '';
+        foreach ($writeBuffer as $byte) {
+            $packet .= chr($byte);
+        }
+
+        // Send data...
+        // Open a socket connection
+        $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+        if ($socket === false) {
+            echo "socket_create() failed: " . socket_strerror(socket_last_error()) . "\n";
+            $response['success'] = false;
+            $response['result'] = "socket error";
+
+            return $response;
+        }
+
+        // Connect to the server
+        $result = socket_connect($socket, $this->ip, $this->port);
+        if ($result === false) {
+            echo "socket_connect() failed: " . socket_strerror(socket_last_error($socket)) . "\n";
+            $response['success'] = false;
+            $response['result'] = "socket error";
+
+            return $response;
+        }
+
+        $res = socket_write($socket, $packet, strlen($packet));
+
+        // Reply
+        $reply = socket_read($socket, 1024);
+
+        // Close the connection
+        socket_close($socket);
+
+        $response['success'] = true;
+        $response['result'] = bin2hex($reply);
+        return $response;
+    }
 }

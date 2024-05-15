@@ -895,8 +895,14 @@ class SocketController extends Controller {
     }
 
     public function send_image_test(Request $request) {
+        #step1: convert from BMP to hex data
         $imageData = $this->convertBitmapToHex();
-        $res = $this->pack1LZO(103, 56, 40, 1, $imageData);
+
+        #step2: compress by lzo
+        $compressedData = $this->lzocompress($imageData);
+
+        #step3: send to Sign
+        $res = $this->pack1LZO(103, 56, 40, 1, $compressedData);
         return $res;
     }
 
@@ -1009,6 +1015,11 @@ class SocketController extends Controller {
             $writeBuffer[] = $byte;
         }
 
+        // Set length in the packet
+        $length = count($writeBuffer) - 6; // Length excluding header (4 bytes) and length bytes (2 bytes)
+        $writeBuffer[6] = intval($length / 256);
+        $writeBuffer[7] = $length % 256;
+
         // Calculate CRC (XOR checksum)
         // $eccValue = 0x7F;
         // foreach ($writeBuffer as $byte) {
@@ -1021,11 +1032,6 @@ class SocketController extends Controller {
         // Append CRC to the packet
         $writeBuffer[] = ($crc >> 8) & 0xFF;  // High byte of CRC
         $writeBuffer[] = $crc & 0xFF;         // Low byte of CRC
-
-        // Set length in the packet
-        $length = count($writeBuffer) - 6; // Length excluding header (4 bytes) and length bytes (2 bytes)
-        $writeBuffer[6] = intval($length / 256);
-        $writeBuffer[7] = $length % 256;
 
         // Convert to binary string
         $packet = '';

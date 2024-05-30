@@ -197,6 +197,8 @@
                     <div id="ledContainer">
                         <div id='wrapperLed' class="row"></div>
                     </div>
+                    <canvas id="3LineLed" width="56" height="40" class="d-none"></canvas>
+
                     {{-- <canvas id="canvas_bg" width="800" height="600" class="d-none"></canvas> --}}
                     <canvas id="canvas" width="700" height="390" class="d-none"></canvas>
                     <div id="gridCanvas" class="gridCanvas rotationTime d-none">
@@ -213,6 +215,7 @@
 <script src="/js/charToLed.js"></script>
 <script src="/js/canvastobmp.min.js"></script>
 <script src="/js/html2canvas.min.js"></script>
+
 <script>
     const messageData = @json($message_data);
     console.log(messageData);
@@ -221,6 +224,7 @@
     let alignments = [0,0,0];
 
     const canvasWidth = 56;
+    const canvasHeight = 40;
     let drawMode = 0; // 3-line mode
 
     var messages = [];
@@ -271,18 +275,19 @@
     const addBlankRow = function (length, previousRowNum) {
 
         for (let i = 0; i < length; i ++) {
-            var col = $('<div class="col-md-12 d-flex justify-content-center blank"/>').appendTo('#wrapperLed');
+            var col = $('<div class="col-md-12 d-flex justify-content-center col blank"/>').appendTo('#wrapperLed');
             lightOff(previousRowNum + i, col);
         }
     }
     
     const addBlackRow = function (length, previousRowNum) {
         for (let i = 0; i < length; i ++) {
-            var col = $('<div class="col-md-12 d-flex justify-content-center"/>').appendTo('#wrapperLed');
+            var col = $('<div class="col-md-12 d-flex justify-content-center col"/>').appendTo('#wrapperLed');
             lightOff(previousRowNum + i, col);
         }
     }
 
+    // Make the initial screen in 3-line mode
     addBlankRow(2, 0);
     addBlackRow(10, 2);
     addBlankRow(3, 12);
@@ -785,6 +790,65 @@
             return isEmpty;
         }
 
+        var convertHTMLtoImage = function () {
+            const cols = document.querySelectorAll('#wrapperLed .col');
+            const canvas = document.getElementById('3LineLed');
+            const context = canvas.getContext('2d');
+
+            for (let col = 0; col < cols.length; col++) {
+                const pixels = cols[col].querySelectorAll('div');
+                for (let row = 0; row < pixels.length; row++) {
+                    if (pixels[row].classList.contains('on')) {
+                        context.fillStyle = 'yellow';
+                    } else {
+                        context.fillStyle = 'black';
+                    }
+                    context.fillRect(row, col, 1, 1);
+                }
+            }
+
+            const width = canvas.width;
+            const height = canvas.height;
+            const imageData = context.getImageData(0, 0, width, height);
+            const data = imageData.data;
+
+            const headerSize = 54;
+            const imageSize = width * height * 3; // 3 bytes per pixel (RGB)
+            const fileSize = headerSize + imageSize;
+            const buffer = new ArrayBuffer(fileSize);
+            const view = new DataView(buffer);
+
+            // BMP Header
+            view.setUint16(0, 0x4D42, false); // BM
+            view.setUint32(2, fileSize, true);
+            view.setUint32(6, 0, true);
+            view.setUint32(10, headerSize, true);
+
+            // DIB Header
+            view.setUint32(14, 40, true); // DIB header size
+            view.setInt32(18, width, true); // Width
+            view.setInt32(22, -height, true); // Height (negative for top-down bitmap)
+            view.setUint16(26, 1, true); // Planes
+            view.setUint16(28, 24, true); // Bits per pixel (24 for RGB)
+            view.setUint32(30, 0, true); // Compression (no compression)
+            view.setUint32(34, imageSize, true); // Image size
+            view.setInt32(38, 2835, true); // Horizontal resolution (pixels per meter)
+            view.setInt32(42, 2835, true); // Vertical resolution (pixels per meter)
+            view.setUint32(46, 0, true); // Colors in color table (none)
+            view.setUint32(50, 0, true); // Important color count (all colors are important)
+
+            // Pixel data
+            let offset = headerSize;
+            for (let i = 0; i < data.length; i += 4) {
+                view.setUint8(offset, data[i + 2]); // Blue
+                view.setUint8(offset + 1, data[i + 1]); // Green
+                view.setUint8(offset + 2, data[i]); // Red
+                offset += 3;
+            }
+
+            const blob = new Blob([buffer], { type: 'image/bmp' });
+        }
+
         var saveMessageCall = function (range, base64Image, imageType) {
             const [msg1 = [], msg2 = [], msg3 = []] = messages;
             const msg = getMessage();
@@ -844,13 +908,12 @@
 
             if (drawMode == 0) { // 3-line mode
                 // html2canvas($("#wrapperLed").first()[0]).then(function(canvas) {
-                    drawText();
+                drawText();
+                // CanvasToBMP.toDataURL($("#canvas").first()[0], function (url) {
+                //     saveMessageCall(range, url, 'bmp');
+                // });
 
-                    CanvasToBMP.toDataURL($("#canvas").first()[0], function (url) {
-                        saveMessageCall(range, url, 'bmp');
-                        // clearMessage();
-                    });
-
+                convertHTMLtoImage();
                 // })
             } else {
                 html2canvas($("#pixelCanvas").first()[0]).then(function(canvas) {

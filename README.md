@@ -22,8 +22,8 @@
 
 7. Create a systemd Service File
    - Run `sudo nano /etc/systemd/system/docker-compose-laravel.service`
-   The above command creates & opens `docker-compose-laravel.service` file in `/etc/systemd/system/`
-   Then, fill a systemd service file with the following content:
+   - The above command creates & opens `docker-compose-laravel.service` file in `/etc/systemd/system/`
+   - Then, fill up a systemd service file with the following content and save it:
    ``` docker-compose-laravel.service
    [Unit]
    Description=Docker Compose Application Service
@@ -40,3 +40,14 @@
 
    [Install]
    WantedBy=multi-user.target
+
+8. Reload systemd
+   `sudo systemctl daemon-reload`
+
+9. Enable the Service
+   `sudo systemctl enable docker-compose-laravel.service`
+
+10. Start or Restart the service
+   `sudo systemctl start docker-compose-laravel.service`
+   or
+   `sudo systemctl restart docker-compose-laravel.service`

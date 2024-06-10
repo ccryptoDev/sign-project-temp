@@ -41,13 +41,13 @@
    [Install]
    WantedBy=multi-user.target
 
-8. Reload systemd
+8. Reload systemd: 
    `sudo systemctl daemon-reload`
 
-9. Enable the Service
+9. Enable the Service: 
    `sudo systemctl enable docker-compose-laravel.service`
 
-10. Start or Restart the service
+10. Start or Restart the service: 
    `sudo systemctl start docker-compose-laravel.service`
    or
    `sudo systemctl restart docker-compose-laravel.service`

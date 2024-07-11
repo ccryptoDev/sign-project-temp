@@ -97,18 +97,28 @@ class SignController extends Controller
             $image->draw_mode = $request->drawMode;
             $image->three_line_alignment = $alignmentList;
     
+            // check if same fileName already exists
+            $fileName = $request->imageName . "." . $request->imageType;
+            if (Storage::disk("public")->exists("assets/media/signmessage/$fileName") && $request->saveMode != 'saveAcopy') {
+                $response["success"] = false;
+                $response["existedFileName"] = true;
+                
+                return $response;
+            } else if (Storage::disk("public")->exists("assets/media/signmessage/$fileName") && $request->saveMode == 'saveAcopy') {
+                $fileName = $request->imageName . '_copy.' . $request->imageType;
+                $image->name = $fileName;
+            }
+            
             try {
                 $image->save();
                 $createdImage = $image->fresh();
     
-                // Save the image into the local storage
-                $fileName = $request->imageName . "." . $request->imageType;
                 // if same fileName exists
-                if (Storage::disk("public")->exists("assets/media/signmessage/$fileName")) {
-                    $fileName = $request->imageName . '_copy.' . $request->imageType;
-                    // Copy the file
-                    // Storage::disk("public")->copy("assets/media/signmessage/$fileName", "assets/media/signmessage/$copyFilename");
-                }
+                // if (Storage::disk("public")->exists("assets/media/signmessage/$fileName")) {
+                //     $fileName = $request->imageName . '_copy.' . $request->imageType;
+                //     // Copy the file
+                //     // Storage::disk("public")->copy("assets/media/signmessage/$fileName", "assets/media/signmessage/$copyFilename");
+                // }
     
                 // Save the BMP file
                 if ($request->hasFile('imageFile')) {

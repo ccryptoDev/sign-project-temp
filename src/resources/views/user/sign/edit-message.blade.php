@@ -927,7 +927,10 @@
                             toastr.success('Saved the message successfully!');
                         }
                     } else {
-                        toastr.error("Something went wrong, please try again.");
+                        if (res.hasOwnProperty('existedFileName') && res.existedFileName == true)
+                            toastr.error("Same file name already exists. Please change the name");
+                        else
+                            toastr.error("Something went wrong, please try again.");
                     }
                 },
                 error: function (err) {

@@ -61,8 +61,8 @@
                 </div> <!-- end: message name and keywords -->
 
                 <div class="mode"> <!-- mode -->
-                    <button class="btn btn-primary" type="button" id="line-mode">3-Line</button>
-                    <button class="btn btn-secondary" type="button" id="dot-mode">Dot Draw</button>
+                    <button class="btn {{ $message_data['draw_mode'] ? 'btn-secondary' : 'btn-primary'}}" type="button" id="line-mode">3-Line</button>
+                    <button class="btn {{ $message_data['draw_mode'] ? 'btn-primary' : 'btn-secondary'}}" type="button" id="dot-mode">Dot Draw</button>
                 </div> <!-- end: mode -->
 
                 <div class="card-header flex-column messages"> <!-- message editbox -->
@@ -1120,7 +1120,7 @@
             addBlackRow(40, 0, 'grid');
 
             // orignal draw in draw-mode
-            if (mode == 'edit') {
+            if (mode == 'edit' && messageData.draw_mode) {
                 for (var row = 0; row < messageData.message.length; row++) {
                     for (var col = 0; col < canvasWidth; col++) {
                         if (messageData.message[row][col]) {
